@@ -2,6 +2,8 @@ const userModify = require('../models/user')
 const productView = require('../models/product')
 const bcrypt = require('bcrypt')
 
+
+///new.......
 const securePassword = async (password) => {
     try {
         const passwordHash = await bcrypt.hash(password, 10);
