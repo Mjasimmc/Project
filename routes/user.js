@@ -5,13 +5,14 @@ const router = express();
 router.set('views',path.join(__dirname,'../views/user'))
 
 const userController = require('../controllers/user')
-const sessioncheck = require('../controllers/userSession')
+const sessioncheck = require('../middleware/userSession')
 
 // welcoming pages
 router.get('/',sessioncheck.result,userController.load_landing)
 router.get('/product/:id',sessioncheck.result,userController.l_browse_Product)
 router.get('/login',sessioncheck.result,userController.load_SignIn)
 router.get('/register',sessioncheck.result,userController.load_SignUp)
+router.get('/lshop',sessioncheck.result,userController.view_shop_before)
 
 
 
@@ -42,5 +43,8 @@ router.get('/delete-address/:id',sessioncheck.homeallow,userController.delete_ad
 router.get('/view-cart',sessioncheck.homeallow,userController.view_cart)
 router.get('/add-cart/:id',sessioncheck.homeallow,userController.add_to_cart)
 router.get('/remove-cart/:id',sessioncheck.homeallow,userController.remove_cart)
+
+// shop
+router.get('/shop',sessioncheck.homeallow,userController.view_shop_after)
 
 module.exports = router;

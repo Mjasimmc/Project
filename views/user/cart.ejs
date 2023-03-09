@@ -2,7 +2,7 @@
     <%- include('../layout/after-login.ejs') %>
         <!-- Start Banner Area -->
         <section class="banner-area organic-breadcrumb">
-            
+
         </section>
         <!-- End Banner Area -->
 
@@ -23,61 +23,64 @@
                                 <th>total</th>
                             </thead>
                             <tbody>
-                                <% let totalPrice = 0 %>
-                                <% cartdata.cart.forEach((element,index)=> { %>
-                                   
-                                    <tr>
-                                        <td>
-                                            
-                                                    <img class="col-md-3 col" style="min-width: 100px;"
+                                <% let totalPrice=0 %>
+                                    <% cartdata.cart.forEach((element,index)=> { %>
+
+                                        <tr>
+                                            <td>
+                                                <div class="col-md-3 col">
+                                                    <img class="img-fluid" height="200px"
                                                         src="/ProductImages/<%= element.product.image[0] %>" alt="">
-                                               
-                                        </td>
-                                        <td>
-                                            <div>
-                                                <p>
-                                                    <%= element.product.name %>
-                                                    
-                                                </p>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <h5>$<%= element.product.price %>
-                                            </h5>
-                                        </td>
-                                        <td>
-                                            <div class="product_count">
-                                                <input type="text" name="qty" id="pdt_count" maxlength="12"
-                                                    value="<%= element.quantity %>" title="Quantity:"
-                                                    class="input-text qty">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <p>
+                                                        <%= element.product.name %>
+
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <h5>$<%= element.product.price %>
+                                                </h5>
+                                            </td>
+                                            <td>
+                                                <div class="product_count">
+                                                    <input type="text" name="qty" id="pdt_count" maxlength="12"
+                                                        value="<%= element.quantity %>" title="Quantity:"
+                                                        class="input-text qty">
 
 
-                                                
-                                                <a href="/add-cart/<%= element.product._id %>">
-                                                    <button class="increase items-count" type="button"><i
-                                                            class="lnr lnr-chevron-up"></i></button>
-                                                </a>
-                                                <a href="/remove-cart/<%= element.product._id %>">
-                                                <button class="reduced items-count" type="button"><i
-                                                        class="lnr lnr-chevron-down"></i></button>
+
+                                                    <a href="/add-cart/<%= element.product._id %>">
+                                                        <button class="increase items-count" type="button"><i
+                                                                class="lnr lnr-chevron-up"></i></button>
                                                     </a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <% let pdt_total_Price = 0 %>
-                                            <h5>$ <%= pdt_total_Price = element.quantity* element.product.price %></h5>
-                                            <% totalPrice += pdt_total_Price %>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                    
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Total Price</td>
-                                        <td><%= totalPrice %></td>
-                                    </tr>
+                                                    <a href="/remove-cart/<%= element.product._id %>">
+                                                        <button class="reduced items-count" type="button"><i
+                                                                class="lnr lnr-chevron-down"></i></button>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <% let pdt_total_Price=0 %>
+                                                    <h5>$ <%= pdt_total_Price=element.quantity* element.product.price %>
+                                                    </h5>
+                                                    <% totalPrice +=pdt_total_Price %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Total Price</td>
+                                                <td>
+                                                    <%= totalPrice %>
+                                                </td>
+                                            </tr>
 
                             </tbody>
                         </table>

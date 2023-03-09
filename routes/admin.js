@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express();
 const multer = require('multer');
-const imagestore = require('../config/storage')
+const imagestore = require('../middleware/storage')
 
 const path = require('path')
 
@@ -11,7 +11,7 @@ const upload = multer({storage:storage})
 
 router.set('views', './views/admin')
 const adminController = require('../controllers/admin')
-const sessionCheck = require('../controllers/adminSession')
+const sessionCheck = require('../middleware/adminSession')
 
 // admin login
 router.get('/',sessionCheck.notLogged,adminController.loadSignIn)

@@ -2,8 +2,6 @@ const userModify = require('../models/user')
 const productView = require('../models/product')
 const bcrypt = require('bcrypt')
 
-
-///new.......
 const securePassword = async (password) => {
     try {
         const passwordHash = await bcrypt.hash(password, 10);
@@ -88,6 +86,9 @@ const post_SignUp = async (req, res, next) => {
             mobile: mobile,
             password: password
         })
+
+
+
         if (userdata != null) {
             req.session.signupmessage = "you already have an account"
             res.redirect('/register')
@@ -351,9 +352,31 @@ const remove_cart = async (req, res, next) => {
         console.log(error.message)
         next(error)
     }
-} 
+}
+const view_shop_after = async (req,res)=>{
+    try {
+        const user = req.session.login
+        const products = await productView.find({ delete: 0 })
+        res.render('shop-after',{products,user})
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
+const view_shop_before = async (req,res)=>{
+    try {
+        const products = await productView.find({ delete: 0 })
+        res.render('shop-before',{products})
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
+
 
 module.exports = {
+    view_shop_after,
+    view_shop_before,
 
     view_cart,
     add_to_cart,
@@ -382,10 +405,3 @@ module.exports = {
     l_browse_Product,
     h_browse_product
 }
-// await userModify.findOneAndUpdate(
-//     { _id: id, "cart.product": pdt_id },
-//     {
-//         $pull: { cart: { product: pdt_id, quantity: 1 } }
-//     }
-// ).then(() => console.log('cart added succfuly'))
-//     .catch((err) => console.log(err))
