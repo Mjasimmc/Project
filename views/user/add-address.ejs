@@ -1,0 +1,74 @@
+<%- include('../layout/header.ejs') %>
+    <%- include('../layout/after-login.ejs') %>
+
+        <section class="banner-area">
+            <div class="container">
+                <div class="row fullscreen align-items-center justify-content-start">
+                    <section class="login_box_area section_gap">
+                        <div class="container-fluid">
+
+                            <div class="row">
+
+                                <div class="col-lg-12">
+                                    <div class="login_form_inner">
+                                        <form class="row login_form" action="/add-address" method="post"
+                                            onsubmit="return validateform()">
+                                            <h1>Enter Address</h3>
+                                            <% if (alertMessage) { %>
+                                                <div class="alert alert-success" role="alert">
+                                                    <%= alertMessage %>
+                                                </div>
+                                                <% } %>
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="text" class="form-control" name="house" placeholder="House" required>
+                                                    </div>
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="text" class="form-control" name="city" placeholder="City" required>
+                                                    </div>
+
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="text" class="form-control" name="district" placeholder="district" required>
+                                                    </div>
+
+
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="text" class="form-control" name="state" placeholder="State" required>
+                                                    </div>
+
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="tel" class="form-control" name="post" placeholder="post" required>
+                                                    </div>
+
+
+                                                    <div class="col-md-12 form-group">
+                                                        <input type="submit" class="primary-btn" value="Save Address">
+
+                                                    </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+        <!--================Login Box Area =================-->
+
+        <!--================End Login Box Area =================-->
+        <script>
+            function validateform() {
+                var mailFormat = /\S+@\S+\.\S+/;
+                if (inputText.value.match(mailFormat)) {
+                    alert("Valid address!");
+                    return true;
+                } else {
+                    alert("Invalid address!");
+                    return false;
+                }
+            }
+            function goBack() {
+                window.history.go(-1);
+            }
+        </script>
+        <%- include('../layout/footer.ejs') %>

@@ -1,0 +1,66 @@
+<%- include('../layout/header.ejs') %>
+    <%- include('../layout/after-login.ejs') %>
+        <section class="banner-area organic-breadcrumb">
+            <div class="container">
+
+            </div>
+        </section>
+        <section class="login_box_area section_gap">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="">
+                            <h6>User Details</h6>
+                            <label for="">Name : <%= userdata.name %></label><br>
+                            <label for="">Email : <%= userdata.email %></label><br>
+                            <label for="">Phone : <%= userdata.mobile %></label><br>
+                            <hr>
+                            <h6>Address</h6>
+                            <% if (userdata.address.length > 0) { %>
+                                <label for="">house : <%= userdata.address[0].house %></label><br>
+                                <label for="">city : <%= userdata.address[0].city %></label><br>
+                                <label for="">district : <%= userdata.address[0].district %></label><br>
+                                <label for="">state : <%= userdata.address[0].state %></label><br>
+                                <label for="">post : <%= userdata.address[0].post %></label><br>
+                                
+                                <% } else { %>
+                                    <a href="/add-address"><button class="btn btn-primary">Add address</button></a>
+                                    <% } %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <a href="/address-list  " class="col-6 col-md-4 col-lg-3">
+                        <button class="btn-primary col margin">Address</button>
+                    </a>
+
+                    <a href="/edit-profile/<%= userdata._id %>" class="col-6 col-md-4 col-lg-3">
+                        <button class="btn-primary col margin">edit Profile</button>
+                    </a>
+
+                    <a href="/addaddress/<%= userdata._id %>" class="col-6 col-md-4 col-lg-3">
+                        <button class="btn-primary col  margin" class="col-6 col-lg-3">edit</button>
+                    </a>
+
+                    <a href="/addaddress/<%= userdata._id %>" class="col-6 col-md-4 col-lg-3">
+                        <button class="btn-primary col margin">Orders details</button>
+                    </a>
+                    
+                </div>
+               
+            </div>
+
+        </section>
+        <style>
+            .margin {
+                margin: 10px;
+                height: 100px;
+            }
+        </style>
+        <%- include('../layout/footer.ejs') %>
