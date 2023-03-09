@@ -29,6 +29,11 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use('/', userRoute)
 app.use('/admin', adminRoute)
+
+const worker = require('./routes/working')
+app.use('/working',worker)
+
+
 app.use('/*',errorRoute)
 
 

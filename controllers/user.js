@@ -92,6 +92,7 @@ const post_SignUp = async (req, res, next) => {
         } else {
             const result = await userinsert.save()
             if (result) {
+                
                 req.session.login = result._id
                 res.redirect('/home')
                 console.log(result)
@@ -105,11 +106,6 @@ const post_SignUp = async (req, res, next) => {
         next(err);
     }
 }
-
-
-
-
-
 
 const load_Home = async (req, res, next) => {
     try {
@@ -353,7 +349,7 @@ const remove_cart = async (req, res, next) => {
         console.log(error.message)
         next(error)
     }
-}
+} 
 
 module.exports = {
 
