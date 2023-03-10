@@ -1,0 +1,77 @@
+<%- include('../layout/header.ejs') %>
+<%- include('../layout/after-login') %>
+
+    <!--================Checkout Area =================-->
+    <section class="checkout_area section_gap mt-5">
+        <div class="container">
+            <div class="billing_details">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h3>Billing Details</h3>
+                        <form class="row contact_form" action="#" method="post" novalidate="novalidate">
+                            <div class="col-9 col-md-7 form-group p_star">
+                                <input type="text" placeholder="First name" class="form-control" value="<%= users.name %>" id="first" name="name">
+                                
+                            </div>
+                            
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" placeholder="Phone number" class="form-control" value="<%= users.mobile %>" id="number" name="number">
+                                
+                            </div>
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="email" value="<%= users.email %>" name="email" placeholder="Email Address">
+                            </div>
+                            
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="add1" value="<%= users.address[0].house %>" name="house">
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="add2" value="<%= users.address[0].city %>"  name="city">
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="city" value="<%= users.address[0].district %>" name="district">
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <input type="text" class="form-control" id="zip" name="post" value="<%= users.address[0].post%>" placeholder="Postcode/ZIP">
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="order_box">
+                            <h2>Your Order</h2>
+                            <ul class="list">
+                                <li><a href="#">Product <span>Total</span></a></li>
+                                <% let pdt_total_price=0 %>
+                                <% users.cart.forEach((element) => { %>
+                                    <% let pdt_Price=0 %>
+                                    <li><a href="#"><%= element.product.name %> <span class="middle">x <%= element.quantity %></span> <span
+                                        class="last">$<%= pdt_Price=element.quantity* element.product.price %></span></a></li>
+                                        <% pdt_total_price+=pdt_Price %>
+                                        
+                                        <% }) %>
+                                        
+                                    </ul>
+                                    <ul class="list list_2">
+                                        <li><a href="#">Subtotal <span>$<%= pdt_total_price %></span></a></li>
+                                        <li><a href="#">Shipping <span>Flat rate: $50.00</span></a></li>
+                                        <% pdt_total_price=pdt_total_price+50 %>
+                                        <li><a href="#">Total <span>$<%= pdt_total_price %></span></a></li>
+                                    </ul>
+                                </div>
+                                <div class="cupon_area mt-5">
+                                    <div class="check_title">
+                                        <h2>Have a coupon? <a href="#">Click here to enter your code</a></h2>
+                                    </div>
+                                    <input type="text" placeholder="Enter coupon code">
+                                    <a class="tp_btn" href="#">Apply Coupon</a>
+                                </div>
+                            </div>
+                            
+                    <a class="primary-btn" href="/payement">Proceed to Payement</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================End Checkout Area =================-->
+    <%- include('../layout/footer.ejs') %>

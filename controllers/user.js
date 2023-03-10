@@ -166,7 +166,6 @@ const load_profile = async (req, res, next) => {
         const userid = req.params.id
         const userdata = await userModify.findById({ _id: userid })
         const address = userdata.address;
-        console.log(address)
         res.render('profile', { userdata, user })
     } catch (err) {
         console.log(err.message)
@@ -200,7 +199,6 @@ const insert_address = async (req, res, next) => {
     try {
         id = req.session.login
         const { house, city, district, state, post } = req.body
-        console.log(house, city, district, state, post)
         const userdata = userModify.findOne({ _id: id })
         if (userdata.address != [] || userdata.address != null) {
             const datatoinsert = {
@@ -287,7 +285,7 @@ const view_cart = async (req, res, next) => {
         req.session.cart = true
         user = req.session.login
         const cartdata = await userModify.findOne({ _id: user }).populate("cart.product")
-        res.render('cart', { user, cartdata })
+        res.render('after-cart', { user, cartdata })
     } catch (error) {
         console.log(error.message)
         next(error)
@@ -307,7 +305,7 @@ const add_to_cart = async (req, res, next) => {
             const quantity = 1
             const datatoinsert = {
                 product: product,
-                quantity: quantity
+                quantity: quantity,
             }
             await userModify.findOneAndUpdate({ _id: id }, {
                 $push: {
@@ -356,7 +354,7 @@ const remove_cart = async (req, res, next) => {
 const view_shop_after = async (req,res)=>{
     try {
         const user = req.session.login
-        const products = await productView.find({ delete: 0 })
+        const {products} = req.session
         res.render('shop-after',{products,user})
     } catch (error) {
         console.log(error.message)
@@ -365,7 +363,7 @@ const view_shop_after = async (req,res)=>{
 }
 const view_shop_before = async (req,res)=>{
     try {
-        const products = await productView.find({ delete: 0 })
+        const {products} = req.session
         res.render('shop-before',{products})
     } catch (error) {
         console.log(error.message)
@@ -373,8 +371,45 @@ const view_shop_before = async (req,res)=>{
     }
 }
 
+const load_checkout = async (req,res)=>{
+    try {
+        const user = req.session.login
+        const users = await userModify.findOne({_id:user} ).populate("cart.product")
+        res.render('after-checkout',{user,users})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+const load_payement = async (req,res)=>{
+    try {
+        const user = req.session.login
+        const {login} = req.session
+        const users = await userModify.findOne({_id:user} ).populate("cart.product")
+        res.render('payement',{user,users})
+    } catch (error) {
+        console.log(error.message)
+
+    }
+}
+const load_placed_order = async(req,res)=>{
+    try {
+        const user  = ""
+        let order = await userModify.findOne({})
+        order = order.cart
+        console.log(order)
+        res.render('order-placed',{user})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 module.exports = {
+    load_placed_order,
+
+    load_payement,
+    load_checkout,
+
+
     view_shop_after,
     view_shop_before,
 

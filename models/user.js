@@ -21,30 +21,36 @@ const userSchema = mongoose.Schema({
         default: 0
     }, address: [
         {
-            house: {type: String},
-            post: {type: Number},
-            city: {type: String},
-            state: {type: String},
-            district:{type:String}
+            house: { type: String },
+            post: { type: Number },
+            city: { type: String },
+            state: { type: String },
+            district: { type: String }
         }
     ],
     blockuser: {
         type: Boolean,
         default: true
     },
-    cart:[
+    cart: [
         {
-            product:{
-                type:String,
-                ref:'product'
+            product: {
+                type: String,
+                ref: 'product'
             },
-            quantity:{
-                type:Number,
-                
+            quantity: {
+                type: Number,
+            },
+            size:{
+                type:String,
+                default:'M'
             }
         }
+    ],
+    orders: [
+        {
+            order:{ref:"orders"}
+        }
     ]
-        
-    
 })
 module.exports = mongoose.model('user', userSchema)

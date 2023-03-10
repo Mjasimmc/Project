@@ -4,6 +4,18 @@ const productView = require('../models/product')
 const serviceid = "";
 
 
+const load_phone = async (req, res) => {
+    try {
+        const users = await userModify.findOne({_id:"64098e92bb3761ea793fa729"}).populate("cart.product")
+
+        console.log(users)
+        res.render('checkout',{users})
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 const load_otp = (req, res) => {
     try {
         res.render('otp-page')
@@ -11,16 +23,6 @@ const load_otp = (req, res) => {
         console.log(error)
     }
 }
-
-const load_phone = async (req, res) => {
-    try {
-        const products = await productView.find({ delete: 0 })
-        res.render('shopping',{products})
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 
 const postNumber = async (req, res) => {
     console.log("hhhhhhhhhhhh");

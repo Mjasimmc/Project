@@ -6,13 +6,14 @@ router.set('views',path.join(__dirname,'../views/user'))
 
 const userController = require('../controllers/user')
 const sessioncheck = require('../middleware/userSession')
+const search = require('../middleware/search')
 
 // welcoming pages
 router.get('/',sessioncheck.result,userController.load_landing)
 router.get('/product/:id',sessioncheck.result,userController.l_browse_Product)
 router.get('/login',sessioncheck.result,userController.load_SignIn)
 router.get('/register',sessioncheck.result,userController.load_SignUp)
-router.get('/lshop',sessioncheck.result,userController.view_shop_before)
+router.get('/lshop',sessioncheck.result,search.search_result,userController.view_shop_before)
 
 
 
@@ -45,6 +46,11 @@ router.get('/add-cart/:id',sessioncheck.homeallow,userController.add_to_cart)
 router.get('/remove-cart/:id',sessioncheck.homeallow,userController.remove_cart)
 
 // shop
-router.get('/shop',sessioncheck.homeallow,userController.view_shop_after)
+router.get('/shop',sessioncheck.homeallow,search.search_result,userController.view_shop_after)
+
+// checkout
+router.get('/checkout',sessioncheck.homeallow,userController.load_checkout)
+router.get('/payement',sessioncheck.homeallow,userController.load_payement)
+router.get('/ordered',userController.load_placed_order)
 
 module.exports = router;
