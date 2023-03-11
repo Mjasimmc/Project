@@ -46,11 +46,6 @@ const userSchema = mongoose.Schema({
                 default:'M'
             }
         }
-    ],
-    orders: [
-        {
-            order:{ref:"orders"}
-        }
     ]
 })
 module.exports = mongoose.model('user', userSchema)

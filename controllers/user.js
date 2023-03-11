@@ -293,13 +293,13 @@ const view_cart = async (req, res, next) => {
 }
 const add_to_cart = async (req, res, next) => {
     try {
-        const pdt_id = req.params.id
+        const {pdt_id} = req.body
         const id = req.session.login
-        let product = await productView.findOne({ _id: pdt_id })
-        product = product._id
+        
 
         const prdtcheck = async (id) => await userModify.findOne({ "cart.product": id })
         const check = await prdtcheck(pdt_id)
+        console.log(pdt_id)
         console.log(check)
         if (check == [] || check == null) {
             const quantity = 1
@@ -312,20 +312,16 @@ const add_to_cart = async (req, res, next) => {
                     cart: [datatoinsert]
                 }
             }, { upsert: true })
+            .then(()=>console.log('inserted'))
                 .catch(() => console.log('not inserted'))
-
         } else {
             const cartdata = await userModify.findOneAndUpdate(
                 { _id: id, "cart.product": pdt_id },
                 { $inc: { "cart.$.quantity": 1 } }
-            ).catch((err) => console.log(err))
+            )
         }
-        if (req.session.cart) {
-            req.session.cart = false
-            res.redirect('/view-cart')
-        } else {
-            res.redirect('/home')
-        }
+        res.json({status:true})
+        
     } catch (err) {
         console.log(err.message);
         next(err)
@@ -333,7 +329,7 @@ const add_to_cart = async (req, res, next) => {
 }
 const remove_cart = async (req, res, next) => {
     try {
-        const pdt_id = req.params.id
+        const {pdt_id} = req.body
         const id = req.session.login
 
         await userModify.findOneAndUpdate(
@@ -345,7 +341,7 @@ const remove_cart = async (req, res, next) => {
             { _id: id, "cart.product": pdt_id },
             { $pull: { cart: { product: pdt_id, quantity: 0 } } }
         ).catch((err) => console.log(err))
-        res.redirect('/view-cart')
+        res.json({status:true})
     } catch (error) {
         console.log(error.message)
         next(error)
@@ -391,20 +387,9 @@ const load_payement = async (req,res)=>{
 
     }
 }
-const load_placed_order = async(req,res)=>{
-    try {
-        const user  = ""
-        let order = await userModify.findOne({})
-        order = order.cart
-        console.log(order)
-        res.render('order-placed',{user})
-    } catch (error) {
-        console.log(error.message)
-    }
-}
 
 module.exports = {
-    load_placed_order,
+   
 
     load_payement,
     load_checkout,

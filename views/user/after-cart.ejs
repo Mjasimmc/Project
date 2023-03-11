@@ -1,6 +1,7 @@
 <%- include('../layout/header.ejs') %>
     <%- include('../layout/after-login.ejs') %>
         <!-- Start Banner Area -->
+
         <section class="banner-area organic-breadcrumb">
 
         </section>
@@ -50,16 +51,15 @@
                                                         value="<%= element.quantity %>" title="Quantity:"
                                                         class="input-text qty">
 
+                                                    <input type="text" id="productId" style="display: none;"
+                                                        value="<%= element.product._id %>">
 
+                                                    <button class="increase items-count" type="button" id="increment"><i
+                                                            class="lnr lnr-chevron-up"></i></button>
 
-                                                    <a href="/add-cart/<%= element.product._id %>">
-                                                        <button class="increase items-count" type="button"><i
-                                                                class="lnr lnr-chevron-up"></i></button>
-                                                    </a>
-                                                    <a href="/remove-cart/<%= element.product._id %>">
-                                                        <button class="reduced items-count" type="button"><i
+                                                    
+                                                        <button class="reduced items-count" type="button" id="decrement"><i
                                                                 class="lnr lnr-chevron-down"></i></button>
-                                                    </a>
                                                 </div>
                                             </td>
                                             <td>
@@ -90,10 +90,64 @@
         </section>
 
         <!--================End Cart Area =================-->
+
         <script>
-            let tot_money = document.getElementById('totalmoney')
-            tot_money.value = 0
+            let product = document.getElementById('productId')
+            let count = document.getElementById('pdt_count')
+            console.log(product.value)
+
+            $('#increment').click(function () {
+                let pdt_id = product.value
+                $.ajax({
+                    url: `/add-cart`,
+                    method: 'POST',
+                    data: {
+                        pdt_id: pdt_id
+                    },
+                    encoded: true,
+                    success: function (response) {
+                        if (response.status) {
+                            let count = parseInt(document.getElementById('pdt_count').value)
+                            document.getElementById('pdt_count').value = count+1
+                        }
+                    }
+
+                });
+            });
+            $('#decrement').click(function () {
+                let pdt_id = product.value
+                $.ajax({
+                    url: `/remove-cart`,
+                    method: 'POST',
+                    data: {
+                        pdt_id: pdt_id
+                    },
+                    encoded: true,
+                    success: function (response) {
+                        if (response.status) {
+                            
+                            let count = parseInt(document.getElementById('pdt_count').value)
+                            document.getElementById('pdt_count').value = count-1
+
+                        }
+                    }
+
+                });
+            });
+
 
         </script>
 
         <%- include('../layout/footer.ejs') %>
+            <!-- $.ajax({
+            url: "/add-cart",
+            method: 'POST',
+            data: {pdt_id: pdt_id},
+            encoded: true,
+            success: function (response) {
+                if (data.success) {
+                    window.location.reload()
+                }
+            }
+
+        }); -->

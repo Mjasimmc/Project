@@ -42,8 +42,8 @@ router.get('/delete-address/:id',sessioncheck.homeallow,userController.delete_ad
 
 // cart
 router.get('/view-cart',sessioncheck.homeallow,userController.view_cart)
-router.get('/add-cart/:id',sessioncheck.homeallow,userController.add_to_cart)
-router.get('/remove-cart/:id',sessioncheck.homeallow,userController.remove_cart)
+router.post('/add-cart',sessioncheck.homeallow,userController.add_to_cart)
+router.post('/remove-cart',sessioncheck.homeallow,userController.remove_cart)
 
 // shop
 router.get('/shop',sessioncheck.homeallow,search.search_result,userController.view_shop_after)
@@ -51,6 +51,6 @@ router.get('/shop',sessioncheck.homeallow,search.search_result,userController.vi
 // checkout
 router.get('/checkout',sessioncheck.homeallow,userController.load_checkout)
 router.get('/payement',sessioncheck.homeallow,userController.load_payement)
-router.get('/ordered',userController.load_placed_order)
+
 
 module.exports = router;

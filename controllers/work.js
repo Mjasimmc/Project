@@ -84,10 +84,22 @@ const verifyOtp = async (req, res) => {
       res.render("user404");
     }
   };
-
+  const load_placed_order = async(req,res)=>{
+    try {
+        const user  = ""
+        let order = await userModify.findOne({})
+        order = order.cart
+        console.log(order)
+        res.render('order-placed',{user})
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 module.exports = {
     load_phone,
     load_otp,
     postNumber,
-    verifyOtp
+    verifyOtp,
+
+    load_placed_order
 }

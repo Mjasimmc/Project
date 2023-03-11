@@ -21,4 +21,4 @@ const order = mongoose.Schema({
     ],
 }
 )
-module.exports = mongoose.model('user', order)
+module.exports = mongoose.model('order', order)
