@@ -45,14 +45,13 @@ const load_SignUp = async (req, res, next) => {
 }
 const post_SignIn = async (req, res, next) => {
     try {
-        const email = req.body.email;
-        const password = req.body.password;
+        const {email,password} = req.body;
         let userdata = await userModify.findOne({ email: email });
         console.log(userdata)
         if (userdata) {
             const pass = await bcrypt.compare(password, userdata.password)
             if (pass) {
-                req.session.login = userdata._id
+                req.session.login = userdata
                 console.log("logged")
                 res.redirect('/home');
             } else {
@@ -73,9 +72,8 @@ const post_SignIn = async (req, res, next) => {
 const post_SignUp = async (req, res, next) => {
     try {
 
-        const name = req.body.name
-        const email = req.body.email
-        const mobile = req.body.mobile
+        const {mobile,name,email} = req.body
+        
         let password = await securePassword(req.body.password)
         const userdata = await userModify.findOne({ email: email })
         console.log(userdata)
@@ -96,7 +94,7 @@ const post_SignUp = async (req, res, next) => {
             const result = await userinsert.save()
             if (result) {
                 
-                req.session.login = result._id
+                req.session.login = result
                 res.redirect('/home')
                 console.log(result)
             } else {
@@ -113,7 +111,7 @@ const post_SignUp = async (req, res, next) => {
 const load_Home = async (req, res, next) => {
     try {
         req.session.cart = false
-        const user = req.session.login
+        const user = req.session.login._id
         const products = await productView.find({ delete: 0 })
         res.render('home', { products, user })
     } catch (err) {
@@ -135,7 +133,7 @@ const logout = async (req, res, next) => {
 const l_browse_Product = async (req, res, next) => {
     try {
         req.session.cart = false
-        const user = req.session.login
+        const user = req.session.login._id
         const prid = req.params.id
         const prdetails = await productView.findOne({ _id: prid })
         res.render('before-pdt-view', { prdetails, user })
@@ -149,7 +147,7 @@ const h_browse_product = async (req, res, next) => {
     try {
         req.session.cart = false
         const prid = req.params.id
-        const user = req.session.login
+        const user = req.session.login._id
         const prdetails = await productView.findOne({ _id: prid })
         res.render('after-pdt-views', { prdetails, user })
 
@@ -162,9 +160,9 @@ const h_browse_product = async (req, res, next) => {
 const load_profile = async (req, res, next) => {
     try {
         req.session.cart = false
-        const user = req.session.login
+        const user = req.session.login._id
         const userid = req.params.id
-        const userdata = await userModify.findById({ _id: userid })
+        const userdata = req.session.login
         const address = userdata.address;
         res.render('profile', { userdata, user })
     } catch (err) {
@@ -176,7 +174,7 @@ const add_address = async (req, res, next) => {
     try {
         alertMessage = ""
         req.session.cart = false
-        const user = req.session.login
+        const user = req.session.login._id
         res.render('add-address', { user, alertMessage })
     } catch (err) {
         console.log(err.message)
@@ -187,7 +185,7 @@ const edit_user = async (req, res, next) => {
     try {
         req.session.cart = false
         const userid = req.params.id
-        const user = await userModify.findById({ _id: userid })
+        const user = req.session.login._id
         res.render('edit-profile', { user })
     } catch (err) {
         console.log(err.message)
@@ -197,9 +195,9 @@ const edit_user = async (req, res, next) => {
 
 const insert_address = async (req, res, next) => {
     try {
-        id = req.session.login
+        id = req.session.login._id
         const { house, city, district, state, post } = req.body
-        const userdata = userModify.findOne({ _id: id })
+        const userdata = req.session.login
         if (userdata.address != [] || userdata.address != null) {
             const datatoinsert = {
                 house: house,
@@ -239,8 +237,8 @@ const insert_address = async (req, res, next) => {
 const load_address = async (req, res, next) => {
     try {
         req.session.cart = false
-        const user = req.session.login
-        const userdata = await userModify.findOne({ _id: user })
+        const user = req.session.login._id
+        const userdata = req.session.login
         res.render('list-address', { userdata, user })
     } catch (err) {
         console.log(err.message)
@@ -283,7 +281,7 @@ const update_profile = async (req, res, next) => {
 const view_cart = async (req, res, next) => {
     try {
         req.session.cart = true
-        user = req.session.login
+        user = req.session.login._id
         const cartdata = await userModify.findOne({ _id: user }).populate("cart.product")
         res.render('after-cart', { user, cartdata })
     } catch (error) {
@@ -294,7 +292,7 @@ const view_cart = async (req, res, next) => {
 const add_to_cart = async (req, res, next) => {
     try {
         const {pdt_id} = req.body
-        const id = req.session.login
+        const id = req.session.login._id
         
 
         const prdtcheck = async (id) => await userModify.findOne({ "cart.product": id })
@@ -330,7 +328,7 @@ const add_to_cart = async (req, res, next) => {
 const remove_cart = async (req, res, next) => {
     try {
         const {pdt_id} = req.body
-        const id = req.session.login
+        const id = req.session.login._id
 
         await userModify.findOneAndUpdate(
             { _id: id, "cart.product": pdt_id },
@@ -349,7 +347,7 @@ const remove_cart = async (req, res, next) => {
 }
 const view_shop_after = async (req,res)=>{
     try {
-        const user = req.session.login
+        const user = req.session.login._id
         const {products} = req.session
         res.render('shop-after',{products,user})
     } catch (error) {
@@ -376,12 +374,11 @@ const load_checkout = async (req,res)=>{
         console.log(error.message)
     }
 }
-const load_payement = async (req,res)=>{
+const load_confirmation = async (req,res)=>{
     try {
-        const user = req.session.login
-        const {login} = req.session
+        const user = req.session.login._id
         const users = await userModify.findOne({_id:user} ).populate("cart.product")
-        res.render('payement',{user,users})
+        res.render('order-placed',{user,users})
     } catch (error) {
         console.log(error.message)
 
@@ -389,9 +386,8 @@ const load_payement = async (req,res)=>{
 }
 
 module.exports = {
-   
 
-    load_payement,
+    load_confirmation,
     load_checkout,
 
 

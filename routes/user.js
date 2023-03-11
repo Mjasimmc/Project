@@ -50,7 +50,7 @@ router.get('/shop',sessioncheck.homeallow,search.search_result,userController.vi
 
 // checkout
 router.get('/checkout',sessioncheck.homeallow,userController.load_checkout)
-router.get('/payement',sessioncheck.homeallow,userController.load_payement)
+router.get('/orderConfirmed',sessioncheck.homeallow,userController.load_confirmation)
 
 
 module.exports = router;

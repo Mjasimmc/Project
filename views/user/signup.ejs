@@ -1,79 +1,64 @@
 <%- include('../layout/header.ejs') %>
+    <%- include('../layout/before-login.ejs') %>
 
 
+        <head>
+            <link rel="stylesheet" href="\stylesheets\signIn.css">
+        </head>
         <!--================Login Box Area =================-->
-        <section class="login_box_area section_gap">
-            <button class="btn btn-primary m-5" style="position: absolute; top:2%;" onclick="goBack()">back</button>
-            <div class="container">
-                
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="login_box_img">
-                            <img class="img-fluid" src="userTemplate/img/login.jpg" alt="">
-                            <div class="hover">
 
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+                <!-- Tabs Titles -->
 
-                                <a class="primary-btn" href="/login">Already Have An Account </a>
-                            </div>
+                <!-- Icon -->
+                <!-- Login Form -->
+
+                <form class="p-t-15" method="post" action="/register">
+                    <% if (alertMessage) { %>
+                        <div class="alert alert-success" role="alert">
+                            <%= alertMessage %>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="login_form_inner">
-                            <h3>Sign up to continue</h3>
-                            <form class="row login_form" action="/register" method="post"
-                                onsubmit="return validateform()">
-                                <% if (alertMessage) { %>
-                                    <div class="alert alert-success" role="alert">
-                                        <%= alertMessage %>
-                                    </div>
-                                    <% } %>
-                                <div class="col-md-12 form-group">
-                                    <input type="text" class="form-control" name="name" placeholder="Username" required>
-                                </div>
+                        <% } %>
 
-                                <div class="col-md-12 form-group">
-                                    <input type="email" class="form-control" name="email" placeholder="Email" required>
-                                </div>
+                            <h4>Login Your Account</h4>
+                            <input type="text" class="fadeIn second" name="name" placeholder="Username" required>
+                            <input type="email" class="fadeIn third" name="email" placeholder="Email" required>
+                            <input type="tel" class="fadeIn fourth" minlength="10" maxlength="10" name="mobile"
+                                placeholder="Phone" required>
+                            <input type="password" class="fadeIn fifth" name="password" placeholder="Password" required>
+                            <input type="password" class="fadeIn second" name="repassword" placeholder="Re-Password"
+                                required>
+                            <input type="submit" class="fadeIn fourth" value="Sign Up">
+                </form>
 
-                                <div class="col-md-12 form-group">
-                                    <input type="tel" class="form-control" minlength="10" maxlength="10" name="mobile"
-                                        placeholder="Phone" required>
-                                </div>
 
-                                <div class="col-md-12 form-group">
-                                    <input type="password" class="form-control" name="password" placeholder="Password"
-                                        required>
-                                </div>
-
-                                <div class="col-md-12 form-group">
-                                    <input type="password" class="form-control" name="repassword"
-                                        placeholder="Re-Password" required>
-                                </div>
-
-                                <div class="col-md-12 form-group">
-                                    <input type="submit" class="primary-btn" value="Sign Up">
-                                    <a href="#">Forgot Password?</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </section>
-        <!--================End Login Box Area =================-->
-        <script>
-            function validateform() {
-                var mailFormat = /\S+@\S+\.\S+/;
-                if (inputText.value.match(mailFormat)) {
-                    alert("Valid address!");
-                    return true;
-                } else {
-                    alert("Invalid address!");  
-                    return false;
-                }
+        </div>
+        <style>
+            input[type=text],
+            input[type=email],
+            input[type=password],
+            input[type=tel] {
+                background-color: #f6f6f6;
+                border: none;
+                color: #0d0d0d;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 5px;
+                width: 85%;
+                border: 2px solid #f6f6f6;
             }
-            function goBack() {
-            window.history.go(-1);
-        }
-        </script>
+
+            input[type=text]:focus,
+            input[type=email]:focus,
+            input[type=password]:focus,
+            input[type=tel]:focus {
+                background-color: #fff;
+                border-bottom: 2px solid #5fbae9;
+            }
+        </style>
         <%- include('../layout/footer.ejs') %>

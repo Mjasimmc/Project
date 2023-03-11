@@ -1,49 +1,36 @@
 <%- include('../layout/header.ejs') %>
-<%- include('../layout/before-login.ejs') %>
-    <!--================Login Box Area =================-->
-    
-    <section class="login_box_area section_gap">
-            
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="login_box_img">
-                        <img class="img-fluid" src="userTemplate/img/login.jpg" alt="">
-                        <div class="hover">
-                            <h4>New to our website?</h4>
-                            <p>There are advances being made in science and technology everyday, and a good example of
-                                this is the</p>
-                            <a class="primary-btn" href="/register">Create an Account</a>
-                        </div>
-                    </div>
+    <%- include('../layout/before-login.ejs') %>
+
+        <head>
+<link rel="stylesheet" href="\stylesheets\signIn.css">
+        </head>
+        <!--================Login Box Area =================-->
+
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+                <!-- Tabs Titles -->
+
+                <!-- Icon -->
+                <!-- Login Form -->
+                
+                <form class="p-t-15" method="post" action="/login">
+
+                    <h4>Login Your Account</h4>
+                    <input type="text" id="login" class="fadeIn second" name="email" placeholder="Enter Email">
+                    <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
+                    <input type="submit" class="fadeIn fourth" value="Log In">
+                </form>
+
+                <!-- Remind Passowrd -->
+                <div id="formFooter">
+                    <a class="underlineHover" href="#">Forgot Password?</a>
                 </div>
-                <div class="col-lg-6">
-                    <div class="login_form_inner">
-                        <h3>Log in to enter</h3>
-                        <% if (alertMessage) { %>
-                            <div class="alert alert-success" role="alert">
-                                <%= alertMessage %>
-                            </div>
-                            <% } %>
-                                <form class="row login_form" action="/login" method="post"
-                                    onsubmit="return validateform()">
-                                    <div class="col-md-12 form-group">
-                                        <input type="email" class="form-control" name="email" placeholder="Email">
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <input type="password" class="form-control" name="password"
-                                            placeholder="Password" required>
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <button type="submit" value="submit" class="primary-btn">Log In</button>
-                                        <a href="#">Forgot Password?</a>
-                                    </div>
-                                </form>
-                    </div>
+                <div id="formFooter">
+                    <a class="underlineHover" href="#">Create an account</a>
                 </div>
+
+
             </div>
         </div>
-    </section>
-    <!--================End Login Box Area =================-->
-    
-    <%- include('../layout/footer.ejs') %>
+        
+        <%- include('../layout/footer.ejs') %>
