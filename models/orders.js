@@ -1,16 +1,24 @@
 const mongoose = require('mongoose');
 const order = mongoose.Schema({
     user: {
-        type: String
-    },
-    product: {
         type: String,
-        ref: 'product'
+        ref: 'user'
     },
+    product: [
+        {
+            _id: {
+                type: String,
+                ref: 'product'
+            },
+            quantity: {
+                type: Number
+            }
+        }
+    ],
     orderid: {
-        type: String
+        type: Number
     },
-    orederdate: {
+    orderdate: {
         type: String
     },
     payement: {
@@ -19,6 +27,18 @@ const order = mongoose.Schema({
     orderstatus: [
         String
     ],
+    orderaddress: {
+        name:{type:String},
+        mobile:{type:Number},
+        house: {type: String},
+        post: { type:Number },
+        city: {type: String},
+        state:{type: String},
+        district: {type: String}
+    },
+    totalprice:{
+        type:Number
+    }
 }
 )
 module.exports = mongoose.model('order', order)

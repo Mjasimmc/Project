@@ -2,6 +2,7 @@ const UserModify = require('../models/user');
 const productModidy = require('../models/product')
 const adminDB = require('../models/admin')
 const categorydata = require('../models/catogory')
+const orderModel =  require('../models/orders')
 
 
 const path = require('path')
@@ -43,7 +44,8 @@ const loadSignIn = async (req, res, next) => {
 }
 const loadHome = async (req, res, next) => {
     try {
-        res.render('home')
+        const orders = await orderModel.find({}).populate("user")
+        res.render('home',{orders})
     } catch (error) {
         console.log(error.message)
         next(error)
@@ -118,8 +120,8 @@ const insertProduct = async (req, res, next) => {
             category: req.body.fruits,
             stock: req.body.stock
         })
-        const categoryid = req.session.category;
-        await categorydata.findOneAndUpdate({ user_id: categoryid }, { $inc: { products: 1 } })
+        const categoryid = req.body.fruits;
+        await categorydata.findOneAndUpdate({ category: categoryid }, { $inc: { products: 1 } })
         const productdata = await product.save()
         if (productdata) {
             console.log(productdata)

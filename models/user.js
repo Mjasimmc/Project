@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema({
     ],
     blockuser: {
         type: Boolean,
-        default: true
+        default: false
     },
     cart: [
         {

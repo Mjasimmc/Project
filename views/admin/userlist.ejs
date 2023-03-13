@@ -34,18 +34,18 @@
                                                 <%= element.mobile %>
                                             </td>
 
-                                            <td>
+                                            <td class="alert-danger">
                                                 <% if (element.blockuser === true) { %>
-                                                    active
-                                                 <% } else { %>
-                                                  blocked
+                                                    blocked
+                                                    <% } else { %>
+                                                        active
                                                 <% } %>
                                             </td>
                                             <td>
                                                 <% if (element.blockuser == true) { %>
-                                                    <a href="/admin/block/<%=  element._id %>">block</a>
+                                                    <a class="btn btn-success" href="/admin/block/<%=  element._id %>">unblock</a>
                                                  <% } else { %>
-                                                  <a href="/admin/unblock/<%=  element._id %>">unblock</a>
+                                                  <a class="btn btn-danger" href="/admin/unblock/<%=  element._id %>">block</a>
                                                 <% } %>
                                             </td>
                                         </tr>

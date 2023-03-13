@@ -1,45 +1,39 @@
 <%- include('../layout/header.ejs') %>
+    <%- include('../layout/before-login.ejs') %>
 
+        <head>
+            <link rel="stylesheet" href="\stylesheets\signIn.css">
+        </head>
         <!--================Login Box Area =================-->
-        <section class="login_box_area section_gap">
-            <button class="btn btn-primary m-5" style="position: absolute; top:2%;" onclick="goBack()">back</button>
-            <div class="container">
-                
-                <div class="row">
-                   
-                    <div class="col-lg-6">
-                        <div class="login_form_inner">
-                            <form class="row login_form" action="/profile" method="post"
-                                onsubmit="return validateform()">
-                                <% if (alertMessage) { %>
-                                    <div class="alert alert-success" role="alert">
-                                        <%= alertMessage %>
-                                    </div>
-                                    <% } %>
-                                <div class="col-md-12 form-group">
-                                    <input type="text" class="form-control" name="name" value="<%= user.name %>" placeholder="Username" required>
-                                </div>
 
-                                <div class="col-md-12 form-group">
-                                    <input type="email" class="form-control" name="email" value="<%= user.email %>" placeholder="Email" required>
-                                </div>
+        <div class="wrapper fadeInDown">
+            <div id="formContent">
+               
 
-                                <div class="col-md-12 form-group">
-                                    <input type="tel" class="form-control" minlength="10" value="<%= user.mobile %>" maxlength="10" name="mobile"
-                                        placeholder="Phone" required>
-                                </div>
+                <form class="p-t-15" method="post" action="/profile">
+                    <% if (typeof alertMessage) { %>
+                        <p class="alert-success">
+                            <%= alertMessage %>
+                        </p>
+                        <% } %>
 
-                                
-                                <div class="col-md-12 form-group">
-                                    <input type="submit" class="primary-btn" value="Save Update">
-                                    
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                            <h4>Login Your Account</h4>
+
+                            <input type="text" id="login" class="fadeIn second" name="name" value="<%= userdata.name %>"
+                                placeholder="Enter Email" requied>
+                            <input type="text" id="login" class="fadeIn second" name="email" value="<%= userdata.email %>"
+                                placeholder="Enter Email" required>
+                            <!-- <input type="text" id="login" class="fadeIn second" minlength="10" value=""
+                                maxlength="10" name="mobile" placeholder="Phone" required> -->
+
+                            <input type="submit" class="fadeIn fourth" value="Save Update">
+                </form>
+
+
             </div>
-        </section>
+        </div>
+
+        <%- include('../layout/footer.ejs') %>
         <!--================End Login Box Area =================-->
         <script>
             function validateform() {

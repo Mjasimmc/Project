@@ -20,7 +20,7 @@ app.use(noCache());
 app.use(express.static('public'))
 
 app.set('view engine', 'ejs')
-app.set('views','./views')
+app.set('views', './views')
 app.use(session({ secret: 'User', saveUninitialized: false, resave: false, cookie: { maxAge: 6000000 } }));
 
 
@@ -31,10 +31,14 @@ app.use('/', userRoute)
 app.use('/admin', adminRoute)
 
 const worker = require('./routes/working')
-app.use('/working',worker)
+app.use('/working', worker)
 
 
-app.use('/*',errorRoute)
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+app.use('/*', errorRoute)
 
 
 app.listen(process.env.PORT, () => console.log("server is running"))

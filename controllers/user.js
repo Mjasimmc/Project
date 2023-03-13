@@ -1,6 +1,26 @@
 const userModify = require('../models/user')
 const productView = require('../models/product')
-const bcrypt = require('bcrypt')
+const orderPlace = require('../models/orders')
+const categorySearch = require('../models/catogory')
+
+const bcrypt = require('bcrypt');
+const accountSid = 'ACc70528d5f66cd5624544f806314b2fba';
+const authToken = 'a4481afde430d52d964827509ee0407b';
+const client = require('twilio')(accountSid, authToken);
+
+
+const serviceSid = 'MG1fef30fecfb4a5ac567e1daf55baa7dd';
+// replace with the phone number you want to send a message to
+const sendOTP = (toNumber,otp)=>{
+    client.messages.create({
+      to: toNumber,
+      messagingServiceSid: serviceSid,
+      body: `Your Otp Is ${otp}`
+    }).then(message => console.log(message.sid))
+      .catch(error => console.log(error));
+}
+
+
 
 const securePassword = async (password) => {
     try {
@@ -14,17 +34,71 @@ const securePassword = async (password) => {
 
 const load_landing = async (req, res, next) => {
     try {
-        req.session.cart = false
+        const category = await categorySearch.find({});
         const products = await productView.find({ delete: 0 })
-        res.render('landing', { products })
+        console.log(products)
+        res.render('landing', { products,category })
     } catch (err) {
         console.log(err.message)
         next(err);
     }
 }
+
+const loadPhoneNumber = async (req, res, next) => {
+    try {
+        alertMessage = req.session.loginmessage
+        req.session.loginmessage = ""
+        res.render('phoneNumber', { alertMessage })
+    } catch (err) {
+        console.log(err.message)
+        next(err);
+    }
+}
+
+const postNumber = async (req,res,next)=>{
+    try {
+        const sendMobile = "+91"+req.body.mobile
+        req.session.mobile = sendMobile
+        const otpSend  = Math.floor((Math.random() * 1000000) + 1)
+        console.log(otpSend)
+        req.session.sendOtp = otpSend
+        sendOTP(sendMobile,otpSend)
+        res.render('otpChecking')
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
+
+const verifyOtp = async(req,res,next)=>{
+    try {
+        const otp = req.session.sendOtp
+        const userOtp = req.body.post
+        if(otp==userOtp){
+            res.redirect('/signUp')
+        }else{
+            res.redirect('/register')
+        }
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+        
+    }
+}
+const load_SignUp = async (req,res,next)=>{
+    try {
+        mobile = req.session.mobile
+        alertMessage = req.session.signupmessage
+        req.session.signupmessage = ""
+        res.render('signup', { alertMessage,mobile })
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
 const load_SignIn = async (req, res, next) => {
     try {
-        req.session.cart = false
+        
         alertMessage = req.session.loginmessage
         req.session.loginmessage = ""
         res.render('signin', { alertMessage })
@@ -33,19 +107,10 @@ const load_SignIn = async (req, res, next) => {
         next(err);
     }
 }
-const load_SignUp = async (req, res, next) => {
-    try {
-        req.session.cart = false
-        alertMessage = req.session.signupmessage
-        res.render('signup', { alertMessage })
-    } catch (err) {
-        console.log(err.message)
-        next(err);
-    }
-}
+
 const post_SignIn = async (req, res, next) => {
     try {
-        const {email,password} = req.body;
+        const { email, password } = req.body;
         let userdata = await userModify.findOne({ email: email });
         console.log(userdata)
         if (userdata) {
@@ -72,8 +137,8 @@ const post_SignIn = async (req, res, next) => {
 const post_SignUp = async (req, res, next) => {
     try {
 
-        const {mobile,name,email} = req.body
-        
+        const { mobile, name, email } = req.body
+
         let password = await securePassword(req.body.password)
         const userdata = await userModify.findOne({ email: email })
         console.log(userdata)
@@ -93,7 +158,7 @@ const post_SignUp = async (req, res, next) => {
         } else {
             const result = await userinsert.save()
             if (result) {
-                
+
                 req.session.login = result
                 res.redirect('/home')
                 console.log(result)
@@ -110,10 +175,12 @@ const post_SignUp = async (req, res, next) => {
 
 const load_Home = async (req, res, next) => {
     try {
-        req.session.cart = false
         const user = req.session.login._id
+        const category = await categorySearch.find({});
         const products = await productView.find({ delete: 0 })
-        res.render('home', { products, user })
+        res.render('home', { products, user, category })
+       
+        
     } catch (err) {
         console.log(err.message)
         next(err);
@@ -132,11 +199,12 @@ const logout = async (req, res, next) => {
 
 const l_browse_Product = async (req, res, next) => {
     try {
-        req.session.cart = false
-        const user = req.session.login._id
         const prid = req.params.id
-        const prdetails = await productView.findOne({ _id: prid })
-        res.render('before-pdt-view', { prdetails, user })
+        const prdetails = await productView.findOne({ _id: prid });
+        const category =  prdetails.category
+        console.log(category)
+        const products = await productView.find({ delete: 0,category:category })
+        res.render('before-pdt-view', { prdetails,products})
 
     } catch (err) {
         console.log(err.message)
@@ -145,11 +213,12 @@ const l_browse_Product = async (req, res, next) => {
 }
 const h_browse_product = async (req, res, next) => {
     try {
-        req.session.cart = false
         const prid = req.params.id
         const user = req.session.login._id
         const prdetails = await productView.findOne({ _id: prid })
-        res.render('after-pdt-views', { prdetails, user })
+        const category =  prdetails.category
+        const products = await productView.find({ delete: 0,category:category }).limit(4)
+        res.render('after-pdt-views', { prdetails, user ,products})
 
     } catch (err) {
         console.log(err.message)
@@ -159,11 +228,8 @@ const h_browse_product = async (req, res, next) => {
 
 const load_profile = async (req, res, next) => {
     try {
-        req.session.cart = false
         const user = req.session.login._id
-        const userid = req.params.id
         const userdata = req.session.login
-        const address = userdata.address;
         res.render('profile', { userdata, user })
     } catch (err) {
         console.log(err.message)
@@ -172,8 +238,8 @@ const load_profile = async (req, res, next) => {
 }
 const add_address = async (req, res, next) => {
     try {
-        alertMessage = ""
-        req.session.cart = false
+        alertMessage = req.session.addmessage
+        req.session.addmessage = ""
         const user = req.session.login._id
         res.render('add-address', { user, alertMessage })
     } catch (err) {
@@ -184,9 +250,9 @@ const add_address = async (req, res, next) => {
 const edit_user = async (req, res, next) => {
     try {
         req.session.cart = false
-        const userid = req.params.id
+        const userdata = req.session.login
         const user = req.session.login._id
-        res.render('edit-profile', { user })
+        res.render('edit-profile', { user,userdata  })
     } catch (err) {
         console.log(err.message)
         next(err);
@@ -195,7 +261,7 @@ const edit_user = async (req, res, next) => {
 
 const insert_address = async (req, res, next) => {
     try {
-        id = req.session.login._id
+        const id = req.session.login._id
         const { house, city, district, state, post } = req.body
         const userdata = req.session.login
         if (userdata.address != [] || userdata.address != null) {
@@ -210,7 +276,7 @@ const insert_address = async (req, res, next) => {
                 $push: {
                     address: [datatoinsert]
                 }
-            }, { new: true }).then(() => console.log('address added succfuly'));
+            }, { new: true }).then(() => req.session.addmessage = 'address added succfuly');
         } else {
             const datatoinsert = {
                 house,
@@ -223,7 +289,7 @@ const insert_address = async (req, res, next) => {
                 $push: {
                     address: [datatoinsert]
                 }
-            }, { new: true }).then(() => console.log('address added succfuly'));
+            }, { new: true }).then(() => req.session.addmessage = 'address added succfuly');
         }
 
 
@@ -236,10 +302,11 @@ const insert_address = async (req, res, next) => {
 
 const load_address = async (req, res, next) => {
     try {
-        req.session.cart = false
+        alertMessage = req.session.addmessage
+        req.session.addmessage = ""
         const user = req.session.login._id
-        const userdata = req.session.login
-        res.render('list-address', { userdata, user })
+        const userdata = await userModify.findOne({ _id: user })
+        res.render('list-address', { userdata, user,alertMessage })
     } catch (err) {
         console.log(err.message)
         next(err)
@@ -248,13 +315,14 @@ const load_address = async (req, res, next) => {
 const delete_address = async (req, res, next) => {
     try {
         const addr_id = req.params.id
-        id = req.session.login
+        id = req.session.login._id
         const result = await userModify.findByIdAndUpdate({ _id: id }, {
             $pull: {
                 address: { _id: addr_id }
             }
-        })
+        }).then(()=>req.session.addmessage = 'address removed')
         res.redirect('/address-list')
+        
     } catch (err) {
         console.log(err.message)
         next(err)
@@ -262,7 +330,7 @@ const delete_address = async (req, res, next) => {
 }
 const update_profile = async (req, res, next) => {
     try {
-        const userid = req.session.login;
+        const userid = req.session.login._id
         const { name, email, mobile } = req.body
         await userModify.findOneAndUpdate({ _id: userid }, {
             $set: {
@@ -291,9 +359,10 @@ const view_cart = async (req, res, next) => {
 }
 const add_to_cart = async (req, res, next) => {
     try {
-        const {pdt_id} = req.body
+        const { pdt_id } = req.body
+        console.log(pdt_id)
         const id = req.session.login._id
-        
+
 
         const prdtcheck = async (id) => await userModify.findOne({ "cart.product": id })
         const check = await prdtcheck(pdt_id)
@@ -302,7 +371,7 @@ const add_to_cart = async (req, res, next) => {
         if (check == [] || check == null) {
             const quantity = 1
             const datatoinsert = {
-                product: product,
+                product: pdt_id,
                 quantity: quantity,
             }
             await userModify.findOneAndUpdate({ _id: id }, {
@@ -310,16 +379,16 @@ const add_to_cart = async (req, res, next) => {
                     cart: [datatoinsert]
                 }
             }, { upsert: true })
-            .then(()=>console.log('inserted'))
+                .then(() => res.json({ status: true }))
                 .catch(() => console.log('not inserted'))
         } else {
             const cartdata = await userModify.findOneAndUpdate(
                 { _id: id, "cart.product": pdt_id },
                 { $inc: { "cart.$.quantity": 1 } }
-            )
+            ).then(() => {
+                res.json({ status: true })
+            })
         }
-        res.json({status:true})
-        
     } catch (err) {
         console.log(err.message);
         next(err)
@@ -327,66 +396,123 @@ const add_to_cart = async (req, res, next) => {
 }
 const remove_cart = async (req, res, next) => {
     try {
-        const {pdt_id} = req.body
+        const { pdt_id } = req.body
+        console.log(pdt_id)
         const id = req.session.login._id
 
         await userModify.findOneAndUpdate(
             { _id: id, "cart.product": pdt_id },
             { $inc: { "cart.$.quantity": -1 } }
         ).catch((err) => console.log(err))
-        
+
         await userModify.findOneAndUpdate(
             { _id: id, "cart.product": pdt_id },
             { $pull: { cart: { product: pdt_id, quantity: 0 } } }
         ).catch((err) => console.log(err))
-        res.json({status:true})
+        res.json({ status: true })
     } catch (error) {
         console.log(error.message)
         next(error)
     }
 }
-const view_shop_after = async (req,res)=>{
+const view_shop_after = async (req, res,next) => {
     try {
+        const category = await categorySearch.find({});
         const user = req.session.login._id
-        const {products} = req.session
-        res.render('shop-after',{products,user})
+        const { products } = req.session
+        res.render('shop-after', { products, user,category })
     } catch (error) {
         console.log(error.message)
         next(error)
     }
 }
-const view_shop_before = async (req,res)=>{
+const view_shop_before = async (req, res,next) => {
     try {
-        const {products} = req.session
-        res.render('shop-before',{products})
+        const category = await categorySearch.find({});
+        const { products } = req.session
+        res.render('shop-before', { products ,category})
     } catch (error) {
         console.log(error.message)
         next(error)
     }
 }
 
-const load_checkout = async (req,res)=>{
-    try {
-        const user = req.session.login
-        const users = await userModify.findOne({_id:user} ).populate("cart.product")
-        res.render('after-checkout',{user,users})
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-const load_confirmation = async (req,res)=>{
+const load_checkout = async (req, res,next) => {
     try {
         const user = req.session.login._id
-        const users = await userModify.findOne({_id:user} ).populate("cart.product")
-        res.render('order-placed',{user,users})
+        const users = await userModify.findOne({_id:user}).populate("cart.product")
+        
+        res.render('after-checkout', { user, users })
     } catch (error) {
         console.log(error.message)
+        next(error)
+    }
+}
+const load_confirmation = async (req, res,next) => {
+    try {
+        const user = req.session.login._id
+        const users = await userModify.findOne({ _id: user }).populate("cart.product")
+        res.render('order-placed', { user, users })
+    } catch (error) {
+        console.log(error.message)
+        next(error)
 
     }
 }
+const post_order = async (req, res,next) => {
+    try {
+        const{name,house,post,city,state,district,totalprice,mobile,email} = req.body
+
+        const user = req.session.login._id
+        payement = "Cash On Delivery"
+        const userdata = await userModify.findOne({ _id: user })
+        let products = userdata.cart
+        const currentDateAndTime = new Date().toString();
+        const orderid = Math.floor((Math.random() * 1000000) + 1)
+        const newOrder = new orderPlace({
+            user: user,
+            product: products,
+            orderid: orderid,
+            orderdate: currentDateAndTime,
+            payement:payement,
+            orderstatus:"order received",
+            orderaddress: {
+                name:name,
+                mobile:mobile,
+                house: house,
+                post:post,
+                city: city,
+                state:state,
+                district: district
+            },
+            totalprice:totalprice
+        })
+        console.log(newOrder)
+        const result = await newOrder.save()
+        if(result){
+            const usercart = await userModify.findOneAndUpdate({_id:user},{$unset:{cart:1}},{ new: true })
+            console.log(usercart)
+            
+            res.redirect('/orderConfirmed')
+        }else{
+            res.redirect('/checkout')
+        }
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+        
+    }
+}
+
 
 module.exports = {
 
+    load_SignUp,
+    loadPhoneNumber,
+    postNumber,
+    verifyOtp,
+
+    post_order,
     load_confirmation,
     load_checkout,
 
@@ -400,7 +526,6 @@ module.exports = {
 
     load_landing,
     load_SignIn,
-    load_SignUp,
 
     load_profile,
     load_Home,
