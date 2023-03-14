@@ -57,7 +57,6 @@ router.get('/shop',sessioncheck.homeallow,block,search.search_result,userControl
 // checkout
 router.get('/checkout',sessioncheck.homeallow,block,userController.load_checkout)
 router.post('/post-order',sessioncheck.homeallow,block,userController.post_order)
-router.get('/orderConfirmed',sessioncheck.homeallow,block,userController.load_confirmation)
 
 
 module.exports = router;

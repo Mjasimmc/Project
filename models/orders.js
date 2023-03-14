@@ -15,9 +15,6 @@ const order = mongoose.Schema({
             }
         }
     ],
-    orderid: {
-        type: Number
-    },
     orderdate: {
         type: String
     },

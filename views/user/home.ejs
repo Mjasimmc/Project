@@ -111,20 +111,21 @@
                         <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
                             All Products
                         </button>
-                        <% category.forEach(element => { %>
-                            <% if (element.products > 0) { %>
-                             <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".<%= element.category %>">
-                                <%= element.category %>
-                            </button>
-                            <% } %>
-                         
-                            
-                        <% }) %>
+                        <% category.forEach(element=> { %>
+                            <% if (element.products> 0) { %>
+                                <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+                                    data-filter=".<%= element.category %>">
+                                    <%= element.category %>
+                                </button>
+                                <% } %>
 
-                        
-                
 
-                        <!--  -->
+                                    <% }) %>
+
+
+
+
+                                        <!--  -->
                     </div>
 
                     <div class="flex-w flex-c-m m-tb-10">
@@ -150,7 +151,7 @@
                             <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
                                 <i class="zmdi zmdi-search"></i>
                             </button>
-                            
+
 
                             <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
                                 placeholder="Search">
@@ -226,14 +227,21 @@
                 $.ajax({
                     url: "/add-cart",
                     method: 'POST',
-                      data: { pdt_id: pdt_id },
+                    data: { pdt_id: pdt_id },
                     encoded: true,
                     success: function (response) {
                         console.log("ok")
-                        window.location.reload()
-
+                        if (response.increment) {
+                            incrementCartCount()
+                        }
                     }
                 });
+            }
+            function incrementCartCount() {
+                var cartIcon = document.querySelector('.icon-header-noti');
+                var currentValue = parseInt(cartIcon.getAttribute('data-notify'));
+                currentValue += 1;
+                cartIcon.setAttribute('data-notify', currentValue);
             }
         </script>
 

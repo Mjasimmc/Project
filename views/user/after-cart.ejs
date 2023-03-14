@@ -19,7 +19,7 @@
                                         let totalPrice = 0
                                     </script>
                                     <% cartdata.cart.forEach((element,index)=> { %>
-                                        <tr class="table_row">
+                                        <tr class="table_row" id="<%= index %>">
                                             <td class="column-1">
                                                 <div class="how-itemcart1">
                                                     <img src="/ProductImages/<%= element.product.image[0] %>" alt="IMG">
@@ -40,7 +40,6 @@
                                                         onclick="decrement('<%= element.product._id %>')">
                                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                                     </div>
-
 
                                                     <input class="mtext-104 cl3 txt-center num-product" type="number"
                                                         name="num-product1" id="countnum"
@@ -204,11 +203,18 @@
                     rows[i].querySelector("#priceAmount").textContent = "$" + subtotal.toFixed(2);
                     totalPrice += subtotal
                     if (quantity == 0) {
-                        window.location.reload()
+                        const myElement = document.getElementById(`${i}`);
+                        var cartIcon = document.querySelector('.icon-header-noti');
+                        var currentValue = parseInt(cartIcon.getAttribute('data-notify'));
+                        currentValue -= 1;
+                        cartIcon.setAttribute('data-notify', currentValue);
+                        // Add the "display: none" CSS property to the element's style attribute
+                        myElement.style.display = "none";
                     }
                 }
                 // Get a reference to the subtotal element
                 var subTotalElement = document.getElementById("subTotal");
+
 
                 // Set the value of the subtotal element to a variable
                 var subTotalValue = totalPrice;
@@ -216,6 +222,7 @@
                 // Update the content of the subtotal element with the variable value
                 subTotalElement.innerHTML = "$" + subTotalValue.toFixed(2);
             }
+
             updatePrice()
             function increment(pdt_id) {
                 $.ajax({

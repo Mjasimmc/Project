@@ -295,17 +295,24 @@
 
 		<script>
 			function increment(pdt_id) {
-				$.ajax({
-					url: "/add-cart",
-					method: 'POST',
-					data: { pdt_id: pdt_id },
-					encoded: true,
-					success: function (response) {
-						console.log("ok")
-						window.location.reload()
-
-					}
-				});
+                $.ajax({
+                    url: "/add-cart",
+                    method: 'POST',
+                    data: { pdt_id: pdt_id },
+                    encoded: true,
+                    success: function (response) {
+                        console.log("ok")
+                        if (response.increment) {
+                            incrementCartCount()
+                        }
+                    }
+                });
+            }
+            function incrementCartCount() {
+                var cartIcon = document.querySelector('.icon-header-noti');
+                var currentValue = parseInt(cartIcon.getAttribute('data-notify'));
+                currentValue += 1;
+                cartIcon.setAttribute('data-notify', currentValue);
 			}
 		</script>
 		<%- include('../layout/footer.ejs') %>
