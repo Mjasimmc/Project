@@ -68,9 +68,7 @@
 													data: { pdt_id: pdt_id },
 													encoded: true,
 													success: function (response) {
-														console.log("ok")
-														window.location.reload()
-
+														postMessage("added to cart")
 													}
 												});
 											}

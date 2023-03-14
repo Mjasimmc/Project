@@ -20,7 +20,6 @@ router.post('/login',sessionCheck.notLogged,adminController.postlogin)
 // logout
 router.get('/logout',adminController.logout)
 
-
 // admin home
 router.get('/home',sessionCheck.logged,adminController.loadHome)
 
@@ -40,6 +39,8 @@ router.post('/addproduct',sessionCheck.logged,upload.array('image',10),adminCont
 
 // viewing and soft deleting
 router.get('/productlist',sessionCheck.logged,adminController.productlist)
+router.get('/edit-product/:id',sessionCheck.logged,adminController.loadEditProduct)
+router.post('/update-product',sessionCheck.logged,adminController.updateProduct)
 router.get('/deleteproduct/:id',sessionCheck.logged,adminController.deleteproduct)
 
 // category

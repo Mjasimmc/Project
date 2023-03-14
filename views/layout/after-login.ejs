@@ -6,7 +6,7 @@
 			<nav class="limiter-menu-desktop p-l-45">
 
 				<!-- Logo desktop -->
-				<a href="#" class="logo">
+				<a href="/" class="logo">
 					<img src="/userTemplate/images/icons/logo-01.png" alt="IMG-LOGO">
 				</a>
 
@@ -31,7 +31,7 @@
 							<a href="/view-cart">Cart</a>
 						</li>
 						<li >
-							<a href="/profile/<%= user %>">Account</a>
+							<a href="/profile/<%= user._id %>">Account</a>
 						</li>
 
 						<!-- <li>
@@ -59,7 +59,7 @@
 					<div class="flex-c-m h-full p-l-18 p-r-25 bor5">
 						<a href="/view-cart">
 							<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart"
-								data-notify="3	">
+								data-notify="<%= user.cart.length %>">
 								<i class="zmdi zmdi-shopping-cart"></i>
 							</div>
 						</a>
@@ -79,7 +79,7 @@
 	<div class="wrap-header-mobile">
 		<!-- Logo moblie -->
 		<div class="logo-mobile">
-			<a href="index.html"><img src="userTemplate/images/icons/logo-01.png" alt="IMG-LOGO"></a>
+			<a href="/"><img src="userTemplate/images/icons/logo-01.png" alt="IMG-LOGO"></a>
 		</div>
 
 		<!-- Icon header -->
@@ -91,10 +91,11 @@
 			</div> -->
 
 			<div class="flex-c-m h-full p-lr-10 bor5">
+				<a href="/view-cart">
 				<div class="icon-header-item cl2 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart"
-					data-notify="2">
+					data-notify="<%= user.cart.length %>">
 					<i class="zmdi zmdi-shopping-cart"></i>
-				</div>
+				</div></a>
 			</div>
 		</div>
 
@@ -111,7 +112,7 @@
 	<div class="menu-mobile">
 		<ul class="main-menu-m">
 			<li>
-				<a href="index.html">Home</a>
+				<a href="/home">Home</a>
 				<!-- <ul class="sub-menu-m">
 					<li><a href="index.html">Homepage 1</a></li>
 					<li><a href="home-02.html">Homepage 2</a></li>
@@ -123,23 +124,23 @@
 			</li>
 
 			<li>
-				<a href="product.html">Shop</a>
+				<a href="/shop">Shop</a>
 			</li>
 
 			<li>
-				<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
+				<a href="/view-cart" class="label1 rs1" data-label1="hot">view-cart</a>
 			</li>
 
 			<li>
-				<a href="blog.html">Blog</a>
+				<a href="/">Blog</a>
 			</li>
 
 			<li>
-				<a href="about.html">About</a>
+				<a href="/">About</a>
 			</li>
 
 			<li>
-				<a href="contact.html">Contact</a>
+				<a href="/">Contact</a>
 			</li>
 		</ul>
 	</div>
@@ -194,7 +195,7 @@
 				</li>
 
 				<li class="p-b-13">
-					<a href="/profile/<%= user %>" class="stext-102 cl2 hov-cl1 trans-04">
+					<a href="/profile/<%= user._id %>" class="stext-102 cl2 hov-cl1 trans-04">
 						My Account
 					</a>
 				</li>

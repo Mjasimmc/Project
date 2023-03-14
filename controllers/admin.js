@@ -199,7 +199,53 @@ const categorylist = async (req, res, next) => {
         next(error)
     }
 }
+const loadEditProduct =  async (req,res,next)=>{
+    try {
+        const productId = req.params.id
+        const product  = await productModidy.findOne({_id:productId})
+        const category = await categorydata.find({})
+        console.log(product)
+        res.render('productEdit',{product,category})
+    } catch (error) {
+        console.log(error.messaage)
+        next(error)
+    }
+}
+const updateProduct = async (req, res, next) => {
+    try {
+       
+           const  name= req.body.name
+           const  price= req.body.price
+           const  description= req.body.description
+           const  category= req.body.fruits
+           const  stock= req.body.stock
+           const id = req.body.product
+           console.log(name,price,description)
+           const productdata = await productModidy.findOneAndUpdate({ _id: id }, {
+               $set: {
+                    name:name,
+                    price:price,
+                    description:description,
+                    category:category,
+                    stock:stock
+                   }
+           }).then(()=>{
+            res.redirect('/admin/productlist')
+           }).catch((error)=>{
+            next(error)
+           })
+          
+           
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
 module.exports = {
+
+    updateProduct,
+    loadEditProduct,
+
     loadSignIn,
     loadHome,
     logout,

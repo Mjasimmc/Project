@@ -15,7 +15,8 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">stock</label>
-                        <input type="tel" class="form-control" name="stock" required>
+                        <input type="text" class="form-control" name="stock" value="" required>
+                    </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Description</label>
@@ -32,12 +33,11 @@
                                 </option>
                                 <% }) %>
 
-
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Image</label>
-                        <input class="form-control" type="file" name="image" id="formFile" multiple>
+                        <input class="form-control" type="file" name="image" id="formFile" width="48" height="480px" multiple>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
                 </form>

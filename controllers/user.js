@@ -19,9 +19,6 @@ const sendOTP = (toNumber,otp)=>{
     }).then(message => console.log(message.sid))
       .catch(error => console.log(error));
 }
-
-
-
 const securePassword = async (password) => {
     try {
         const passwordHash = await bcrypt.hash(password, 10);
@@ -31,7 +28,6 @@ const securePassword = async (password) => {
         res.redirect('/')
     }
 }
-
 const load_landing = async (req, res, next) => {
     try {
         const category = await categorySearch.find({});
@@ -43,7 +39,6 @@ const load_landing = async (req, res, next) => {
         next(err);
     }
 }
-
 const loadPhoneNumber = async (req, res, next) => {
     try {
         alertMessage = req.session.loginmessage
@@ -54,7 +49,6 @@ const loadPhoneNumber = async (req, res, next) => {
         next(err);
     }
 }
-
 const postNumber = async (req,res,next)=>{
     try {
         const sendMobile = "+91"+req.body.mobile
@@ -69,7 +63,6 @@ const postNumber = async (req,res,next)=>{
         next(error)
     }
 }
-
 const verifyOtp = async(req,res,next)=>{
     try {
         const otp = req.session.sendOtp
@@ -99,7 +92,7 @@ const load_SignUp = async (req,res,next)=>{
 const load_SignIn = async (req, res, next) => {
     try {
         
-        alertMessage = req.session.loginmessage
+        let alertMessage = req.session.loginmessage
         req.session.loginmessage = ""
         res.render('signin', { alertMessage })
     } catch (err) {
@@ -107,7 +100,6 @@ const load_SignIn = async (req, res, next) => {
         next(err);
     }
 }
-
 const post_SignIn = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -172,12 +164,12 @@ const post_SignUp = async (req, res, next) => {
         next(err);
     }
 }
-
 const load_Home = async (req, res, next) => {
     try {
-        const user = req.session.login._id
+        const user = req.session.login
         const category = await categorySearch.find({});
-        const products = await productView.find({ delete: 0 })
+        var products = await productView.find({ delete: 0 })
+        console.log(category)
         res.render('home', { products, user, category })
        
         
@@ -198,7 +190,7 @@ const logout = async (req, res, next) => {
 }
 
 const l_browse_Product = async (req, res, next) => {
-    try {
+    try {hhgfrd
         const prid = req.params.id
         const prdetails = await productView.findOne({ _id: prid });
         const category =  prdetails.category
@@ -214,7 +206,7 @@ const l_browse_Product = async (req, res, next) => {
 const h_browse_product = async (req, res, next) => {
     try {
         const prid = req.params.id
-        const user = req.session.login._id
+        const user = req.session.login
         const prdetails = await productView.findOne({ _id: prid })
         const category =  prdetails.category
         const products = await productView.find({ delete: 0,category:category }).limit(4)
@@ -228,7 +220,7 @@ const h_browse_product = async (req, res, next) => {
 
 const load_profile = async (req, res, next) => {
     try {
-        const user = req.session.login._id
+        const user = req.session.login
         const userdata = req.session.login
         res.render('profile', { userdata, user })
     } catch (err) {
@@ -240,7 +232,7 @@ const add_address = async (req, res, next) => {
     try {
         alertMessage = req.session.addmessage
         req.session.addmessage = ""
-        const user = req.session.login._id
+        const user = req.session.login
         res.render('add-address', { user, alertMessage })
     } catch (err) {
         console.log(err.message)
@@ -251,7 +243,7 @@ const edit_user = async (req, res, next) => {
     try {
         req.session.cart = false
         const userdata = req.session.login
-        const user = req.session.login._id
+        const user = req.session.login
         res.render('edit-profile', { user,userdata  })
     } catch (err) {
         console.log(err.message)
@@ -261,7 +253,7 @@ const edit_user = async (req, res, next) => {
 
 const insert_address = async (req, res, next) => {
     try {
-        const id = req.session.login._id
+        const id = req.session.login
         const { house, city, district, state, post } = req.body
         const userdata = req.session.login
         if (userdata.address != [] || userdata.address != null) {
@@ -304,7 +296,7 @@ const load_address = async (req, res, next) => {
     try {
         alertMessage = req.session.addmessage
         req.session.addmessage = ""
-        const user = req.session.login._id
+        const user = req.session.login
         const userdata = await userModify.findOne({ _id: user })
         res.render('list-address', { userdata, user,alertMessage })
     } catch (err) {
@@ -349,7 +341,7 @@ const update_profile = async (req, res, next) => {
 const view_cart = async (req, res, next) => {
     try {
         req.session.cart = true
-        user = req.session.login._id
+        const user = req.session.login
         const cartdata = await userModify.findOne({ _id: user }).populate("cart.product")
         res.render('after-cart', { user, cartdata })
     } catch (error) {
@@ -382,7 +374,7 @@ const add_to_cart = async (req, res, next) => {
                 .then(() => res.json({ status: true }))
                 .catch(() => console.log('not inserted'))
         } else {
-            const cartdata = await userModify.findOneAndUpdate(
+            await userModify.findOneAndUpdate(
                 { _id: id, "cart.product": pdt_id },
                 { $inc: { "cart.$.quantity": 1 } }
             ).then(() => {
@@ -399,12 +391,10 @@ const remove_cart = async (req, res, next) => {
         const { pdt_id } = req.body
         console.log(pdt_id)
         const id = req.session.login._id
-
         await userModify.findOneAndUpdate(
             { _id: id, "cart.product": pdt_id },
             { $inc: { "cart.$.quantity": -1 } }
         ).catch((err) => console.log(err))
-
         await userModify.findOneAndUpdate(
             { _id: id, "cart.product": pdt_id },
             { $pull: { cart: { product: pdt_id, quantity: 0 } } }
@@ -418,7 +408,7 @@ const remove_cart = async (req, res, next) => {
 const view_shop_after = async (req, res,next) => {
     try {
         const category = await categorySearch.find({});
-        const user = req.session.login._id
+        const user = req.session.login
         const { products } = req.session
         res.render('shop-after', { products, user,category })
     } catch (error) {
@@ -430,18 +420,17 @@ const view_shop_before = async (req, res,next) => {
     try {
         const category = await categorySearch.find({});
         const { products } = req.session
+        console.log(category)
         res.render('shop-before', { products ,category})
     } catch (error) {
         console.log(error.message)
         next(error)
     }
 }
-
 const load_checkout = async (req, res,next) => {
     try {
-        const user = req.session.login._id
+        const user = req.session.login
         const users = await userModify.findOne({_id:user}).populate("cart.product")
-        
         res.render('after-checkout', { user, users })
     } catch (error) {
         console.log(error.message)
@@ -450,19 +439,16 @@ const load_checkout = async (req, res,next) => {
 }
 const load_confirmation = async (req, res,next) => {
     try {
-        const user = req.session.login._id
-        const users = await userModify.findOne({ _id: user }).populate("cart.product")
+        const user = req.session.login
         res.render('order-placed', { user, users })
     } catch (error) {
         console.log(error.message)
         next(error)
-
     }
 }
 const post_order = async (req, res,next) => {
     try {
-        const{name,house,post,city,state,district,totalprice,mobile,email} = req.body
-
+        const{name,house,post,city,state,district,totalprice,mobile} = req.body
         const user = req.session.login._id
         payement = "Cash On Delivery"
         const userdata = await userModify.findOne({ _id: user })
@@ -500,7 +486,6 @@ const post_order = async (req, res,next) => {
     } catch (error) {
         console.log(error.message)
         next(error)
-        
     }
 }
 
