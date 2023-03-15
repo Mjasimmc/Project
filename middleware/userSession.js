@@ -20,7 +20,7 @@ const homeallow = async (req,res,next)=>{
             req.session.login = user
             next()
         }else{
-            res.redirect('/')
+            res.redirect('/login')
         }
     } catch (error) {
         console.log(error.message)

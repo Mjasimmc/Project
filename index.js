@@ -30,10 +30,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/', userRoute)
 app.use('/admin', adminRoute)
 
-const worker = require('./routes/working')
-app.use('/working', worker)
-
-
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');

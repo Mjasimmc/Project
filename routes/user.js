@@ -11,13 +11,16 @@ const block = require('../middleware/block')
 
 // welcoming pages
 router.get('/',sessioncheck.result,userController.load_landing)
-router.get('/product/:id',sessioncheck.result,userController.l_browse_Product)
+router.get('/product/:id',search.productGet,sessioncheck.result,userController.l_browse_Product)
 router.get('/login',sessioncheck.result,userController.load_SignIn)
+router.get('/forgetPass',sessioncheck.result,userController.loadForgotPassword)
+router.post('/forgetPass',sessioncheck.result,userController.postNumberForgetPass)
+router.post('/passChange',sessioncheck.result,userController.postOtpPass)
 
 
 
 router.get('/register',sessioncheck.result,userController.loadPhoneNumber)
-router.post('/verify',sessioncheck.result,userController.postNumber)
+router.post('/register',sessioncheck.result,userController.postNumber)
 router.get('/signUp',sessioncheck.phonecheck,userController.load_SignUp)
 router.get('/lshop',sessioncheck.result,search.search_result,userController.view_shop_before)
 
@@ -32,7 +35,7 @@ router.get('/logout',userController.logout)
 // user activities
 router.get('/home',sessioncheck.homeallow,block,userController.load_Home)
 router.get('/profile',sessioncheck.homeallow,block,userController.load_profile)
-router.get('/product-home/:id',sessioncheck.homeallow,block,userController.h_browse_product)
+router.get('/product-home/:id',search.productLook,sessioncheck.homeallow,block,userController.h_browse_product)
 router.get('/edit-profile/:id',sessioncheck.homeallow,block,userController.edit_user)
 router.get('/profile/:id',sessioncheck.homeallow,block,userController.load_profile)
 router.post('/profile',sessioncheck.homeallow,block,userController.update_profile)
@@ -50,6 +53,7 @@ router.get('/delete-address/:id',sessioncheck.homeallow,block,userController.del
 router.get('/view-cart',sessioncheck.homeallow,block,userController.view_cart)
 router.post('/add-cart',sessioncheck.homeallow,block,userController.add_to_cart)
 router.post('/remove-cart',sessioncheck.homeallow,block,userController.remove_cart)
+router.post('/deleteProductcart',sessioncheck.homeallow,block,userController.deleteProductCart)
 
 // shop
 router.get('/shop',sessioncheck.homeallow,block,search.search_result,userController.view_shop_after)

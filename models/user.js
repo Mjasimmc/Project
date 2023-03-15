@@ -44,6 +44,9 @@ const userSchema = mongoose.Schema({
             size:{
                 type:String,
                 default:'M'
+            },
+            total:{
+                type:String
             }
         }
     ]

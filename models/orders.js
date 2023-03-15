@@ -4,17 +4,18 @@ const order = mongoose.Schema({
         type: String,
         ref: 'user'
     },
-    product: [
-        {
-            _id: {
-                type: String,
-                ref: 'product'
-            },
-            quantity: {
-                type: Number
-            }
+    products: [{
+        product: {
+            type: String,
+            ref: 'product'
+        },
+        quantity: {
+            type: Number
+        },
+        size:{
+            type:String
         }
-    ],
+    }],
     orderdate: {
         type: String
     },
@@ -25,17 +26,16 @@ const order = mongoose.Schema({
         String
     ],
     orderaddress: {
-        name:{type:String},
-        mobile:{type:Number},
-        house: {type: String},
-        post: { type:Number },
-        city: {type: String},
-        state:{type: String},
-        district: {type: String}
+        name: { type: String },
+        mobile: { type: Number },
+        house: { type: String },
+        post: { type: Number },
+        city: { type: String },
+        state: { type: String },
+        district: { type: String }
     },
-    totalprice:{
-        type:Number
+    totalprice: {
+        type: Number
     }
-}
-)
+})
 module.exports = mongoose.model('order', order)

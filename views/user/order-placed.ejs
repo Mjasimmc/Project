@@ -1,261 +1,174 @@
 <%- include('../layout/header.ejs') %>
+  <%- include('../layout/after-login.ejs') %>
+    <div class="container-fluid">
 
-	<%- include('../layout/after-login') %>
-		<!DOCTYPE html>
-		<html>
+      <div class="container">
+        <!-- Title -->
+        <div class="d-flex justify-content-between align-items-center py-3">
+          <h2 class="h5 mb-0"><a href="#" class="text-muted"></a> Order #<%= orderDetails._id %>
+          </h2>
+        </div>
 
-		<head>
-			<title></title>
-			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-		</head>
-
-		<body style="margin: 0 !important; padding: 0 !important; background-color: #eeeeee;" bgcolor="#eeeeee">
-
-			<table border="0" cellpadding="0" cellspacing="0" width="100%">
-				<tr>
-					<td align="center" style="background-color: #eeeeee;" bgcolor="#eeeeee">
-
-						<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-							style="max-width:600px;">
-							<tr>
-								<td align="center" style="padding: 35px 35px 20px 35px; background-color: #ffffff;"
-									bgcolor="#ffffff">
-									<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-										style="max-width:600px;">
-										<tr>
-											<td align="center"
-												style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;">
-												<img src="https://img.icons8.com/carbon-copy/100/000000/checked-checkbox.png"
-													width="125" height="120" style="display: block; border: 0px;" /><br>
-												<h2
-													style="font-size: 30px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;">
-													Thank You For Your Order!
-												</h2>
-											</td>
-										</tr>
-										<tr>
-											<td align="left"
-												style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px;">
-												<p
-													style="font-size: 16px; font-weight: 400; line-height: 24px; color: #777777;">
-													Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-													Praesentium iste ipsa numquam odio dolores, nam.
-												</p>
-											</td>
-										</tr>
-										<tr>
-											<td align="left" style="padding-top: 20px;">
-												<table cellspacing="0" cellpadding="0" border="0" width="100%">
-													<tr>
-														<td width="75%" align="left" bgcolor="#eeeeee"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">
-															Order Confirmation #
-														</td>
-														<td width="25%" align="left" bgcolor="#eeeeee"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px;">
-															2345678
-														</td>
-													</tr>
-													<tr>
-														<td width="75%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-															Purchased Item (1)
-														</td>
-														<td width="25%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-															$100.00
-														</td>
-													</tr>
-													<tr>
-														<td width="75%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
-															Shipping + Handling
-														</td>
-														<td width="25%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
-															$10.00
-														</td>
-													</tr>
-													<tr>
-														<td width="75%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
-															Sales Tax
-														</td>
-														<td width="25%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding: 5px 10px;">
-															$5.00
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td align="left" style="padding-top: 20px;">
-												<table cellspacing="0" cellpadding="0" border="0" width="100%">
-													<tr>
-														<td width="75%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;">
-															TOTAL
-														</td>
-														<td width="25%" align="left"
-															style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 24px; padding: 10px; border-top: 3px solid #eeeeee; border-bottom: 3px solid #eeeeee;">
-															$115.00
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-									</table>
-
-								</td>
-							</tr>
-							<tr>
-								<td align="center" height="100%" valign="top" width="100%"
-									style="padding: 0 35px 35px 35px; background-color: #ffffff;" bgcolor="#ffffff">
-									<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-										style="max-width:660px;">
-										<tr>
-											<td align="center" valign="top" style="font-size:0;">
-												<div
-													style="display:inline-block; max-width:50%; min-width:240px; vertical-align:top; width:100%;">
-
-													<table align="left" border="0" cellpadding="0" cellspacing="0"
-														width="100%" style="max-width:300px;">
-														<tr>
-															<td align="left" valign="top"
-																style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
-																<p style="font-weight: 800;">Delivery Address</p>
-																<p>675 Massachusetts Avenue<br>11th Floor<br>Cambridge,
-																	MA 02139</p>
-
-															</td>
-														</tr>
-													</table>
-												</div>
-												<div
-													style="display:inline-block; max-width:50%; min-width:240px; vertical-align:top; width:100%;">
-													<table align="left" border="0" cellpadding="0" cellspacing="0"
-														width="100%" style="max-width:300px;">
-														<tr>
-															<td align="left" valign="top"
-																style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
-																<p style="font-weight: 800;">Estimated Delivery Date</p>
-																<p>January 1st, 2016</p>
-															</td>
-														</tr>
-													</table>
-												</div>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td align="center" style=" padding: 35px; background-color: #ff7361;" bgcolor="#1b9ba3">
-									<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
-										style="max-width:600px;">
-										
-										<tr>
-											<td align="center" style="padding: 25px 0 15px 0;">
-												<table border="0" cellspacing="0" cellpadding="0">
-													<tr>
-														<td align="center" style="border-radius: 5px;"
-															bgcolor="#66b3b7">
-															<a href="#" target="_blank"
-																style="font-size: 18px; font-family: Open Sans, Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 5px; background-color: #F44336; padding: 15px 30px; border: 1px solid #F44336; display: block;">Invoice</a>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td align="center" style="padding: 25px 0 15px 0;">
-												<table border="0" cellspacing="0" cellpadding="0">
-													<tr>
-														<td align="center" style="border-radius: 5px;"
-															bgcolor="#66b3b7">
-															<a href="/home"
-																style="font-size: 18px; font-family: Open Sans, Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; border-radius: 5px; background-color: #F44336; padding: 15px 30px; border: 1px solid #F44336; display: block;">Shop
-																Again</a>
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										
-										
-									</table>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-
-			
-				<style type="text/css">
-					body,
-					table,
-					td,
-					a {
-						-webkit-text-size-adjust: 100%;
-						-ms-text-size-adjust: 100%;
-					}
-
-					table,
-					td {
-						mso-table-lspace: 0pt;
-						mso-table-rspace: 0pt;
-					}
-
-					img {
-						-ms-interpolation-mode: bicubic;
-					}
-
-					img {
-						border: 0;
-						height: auto;
-						line-height: 100%;
-						outline: none;
-						text-decoration: none;
-					}
-
-					table {
-						border-collapse: collapse !important;
-					}
-
-					body {
-						height: 100% !important;
-						margin: 0 !important;
-						padding: 0 !important;
-						width: 100% !important;
-					}
+        <!-- Main content -->
+        <div class="row">
+          <div class="col-lg-8">
+            <!-- Details -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="mb-3 d-flex justify-content-between">
+                  <div>
+                    <span class="me-3">
+                      <%= orderDetails.orderdate %>
+                    </span>
+                  </div>
+                  <div class="d-flex">
+                    <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text"><i class="bi bi-download"></i>
+                      <span class="text">Invoice</span></button>
+                    <div class="dropdown">
+                      <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-three-dots-vertical"></i>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Edit</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <table class="table table-borderless">
+                  <tbody>
+                    <% let totalPrice = 0 %>
+                    <% orderDetails.products.forEach((element)=> { %>
 
 
-					a[x-apple-data-detectors] {
-						color: inherit !important;
-						text-decoration: none !important;
-						font-size: inherit !important;
-						font-family: inherit !important;
-						font-weight: inherit !important;
-						line-height: inherit !important;
-					}
 
-					@media screen and (max-width: 480px) {
-						.mobile-hide {
-							display: none !important;
-						}
+                      <tr>
+                        <td>
+                          <div class="d-flex mb-2">
+                            <div class="flex-shrink-0">
+                              <img src="/ProductImages/<%= element.product.image[0] %>" alt="" width="35"
+                                class="img-fluid">
+                            </div>
+                            <div class="flex-lg-grow-1 ms-3">
+                              <h6 class="small mb-0"><a href="#" class="text-reset"><%= element.product.name %></a></h6>
+                              <span class="small">size:<%= element.size %></span>
+                              <% totalPrice += element.quantity*element.product.price %>
+                            </div>
+                          </div>
+                        </td>
+                        <td>quanity : <%= element.quantity %></td>
+                        <td class="text-end">$<%= element.quantity*element.product.price %></td>
+                      </tr>
 
-						.mobile-center {
-							text-align: center !important;
-						}
-					}
+                      <% }) %>
 
-					div[style*="margin: 16px 0;"] {
-						margin: 0 !important;
-					}
-				</style>
-				<%- include('../layout/footer.ejs') %>
+
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2">Subtotal</td>
+                      <td class="text-end">$<%= totalPrice %></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">Shipping</td>
+                      <td class="text-end">$20.00</td>
+                    </tr>
+                    <!-- <tr>
+                      <td colspan="2">Discount (Code: NEWYEAR)</td>
+                      <td class="text-danger text-end">-$10.00</td>
+                    </tr> -->
+                    <tr class="fw-bold">
+                      <td colspan="2">TOTAL</td>
+                      <td class="text-end">$<%= totalPrice+20 %></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <!-- Payment -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <h3 class="h6">Payment Method</h3>
+                    <p>Visa -1234 <br>
+                      Total: $169,98 <span class="badge bg-success rounded-pill">PAID</span></p>
+                  </div>
+                  <div class="col-lg-6">
+                    <h3 class="h6">Billing address</h3>
+                    <address>
+                      <strong>
+                        <%= orderDetails.orderaddress.name %>
+                      </strong><br>
+                      <%= orderDetails.orderaddress.house %>, <%= orderDetails.orderaddress.city %><br>
+                          <%= orderDetails.orderaddress.district %>,<%= orderDetails.orderaddress.post %><br>
+                              <strong title="Phone">P:</strong> +<%= orderDetails.orderaddress.mobile %>
+                    </address>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <!-- Customer Notes -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="h6">Customer Notes</h3>
+                <p>Your Order has been recieved, Thanks for your order</p>
+              </div>
+            </div>
+            <div class="card mb-4">
+              <!-- Shipping information -->
+              <div class="card-body">
+                <h3 class="h6">Track your order</h3>
+                <strong>FedEx</strong>
+                <span><a href="#" class="text-decoration-underline" target="_blank">FF1234567890</a> <i
+                    class="bi bi-box-arrow-up-right"></i> </span>
+                <hr>
+                <h3 class="h6">Address</h3>
+                <address>
+                  <strong>
+                    <%= orderDetails.orderaddress.name %>
+                  </strong><br>
+                  <%= orderDetails.orderaddress.house %>, <%= orderDetails.orderaddress.city %><br>
+                      <%= orderDetails.orderaddress.district %>,<%= orderDetails.orderaddress.post %><br>
+                          <strong title="Phone">P:</strong> +<%= orderDetails.orderaddress.mobile %>
+                </address>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <style>
+      body {
+        background: #eee;
+      }
+
+      .card {
+        box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+      }
+
+      .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0, 0, 0, .125);
+        border-radius: 1rem;
+      }
+
+      .text-reset {
+        --bs-text-opacity: 1;
+        color: inherit !important;
+      }
+
+      a {
+        color: #5465ff;
+        text-decoration: none;
+      }
+    </style>
+    <%- include('../layout/footer.ejs') %>

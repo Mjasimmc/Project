@@ -7,10 +7,13 @@
         <!--================Login Box Area =================-->
         <div class="wrapper fadeInDown">
             <div id="formContent">
-                <form class="p-t-15" method="post" action="/verify">
-                    <h4>Enter Your Number</h4>
+                <form class="p-t-15" method="post" action="">
+                    <h4>Enter Your Email and Number</h4>
+                    <input type="email" id="login number" class="fadeIn second" name="email"
+                        placeholder="Enter Mobile" required>
                     <input type="text" id="login number" oninput="numbercheck()" class="fadeIn second" name="mobile"
                         placeholder="Enter Mobile" required>
+
                     <input type="submit" class="fadeIn fourth" value="Submit">
                     <div id="formFooter">
                         <a class="underlineHover" href="/login">Already have Account</a>

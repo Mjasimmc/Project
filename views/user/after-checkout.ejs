@@ -180,27 +180,28 @@
                             <div class="panel-body">
                                 <div class="form-group">
 
-                                    <input type="checkbox" class="col-1" name="payement" value="Cash On Delivery" required>
-                                    <div class="col-md-12">
-                                        
-                                        <strong class="col-5">Cash On Delivery</strong>
-                                    </div>
-
-
+                                    <input type="radio" onclick="hide()" class="col-1" name="payement"
+                                        value="Cash On Delivery" required>
+                                    <strong class="col-5">Cash On Delivery</strong>
                                 </div>
-                                <input type="radio" onclick=""><div>Online Paement</div>
-
+                                <div class="form-group  ">
+                                    <input type="radio" name="payement" onclick="display()" class="col-1"
+                                        value="Online Payement" required>
+                                    <strong class="col-5">Online Payement</strong>
+                                </div>
                                 <div class="form-group" id="ok" style="display: none;">
                                     <div class="col-md-12"><strong>Credit Card Number:</strong></div>
-                                    <div class="col-md-12"><input type="text" class="form-control" name="car_number"
-                                            value="" /></div>
-                                </div>
-                                <div class="form-group" id="ok">
-                                    <div class="col-md-12"><strong>Card CVV:</strong></div>
-                                    <div class="col-md-12"><input type="text" class="form-control" name="car_code"
-                                            value="" /></div>
+                                    <div class=" col-md-12">
+                                        <input type=" text" class="form-control" name="car_number" value="" id="inputdetails" />
+                                    </div>
                                 </div>
                                 <div class="form-group" id="ok" style="display: none;">
+                                    <div class="col-md-12"><strong>Card CVV:</strong></div>
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control" name="car_code" value=""  id="inputdetails"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="ok">
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <button type="submit" class="btn btn-primary btn-submit-fix">Place
                                             Order</button>
@@ -210,16 +211,20 @@
                         </div>
                         <!--CREDIT CART PAYMENT END-->
                     </div>
-
                 </form>
             </div>
-           <script>
-            const myElement = document.getElementById(`ok`);
-            function dis(){
-
-                myElement.style.display = ""
-            }
-           </script>
+            <script>
+                const inpuElement = document.getElementById('inputdetails')
+                const myElement = document.getElementById(`ok`);
+                function display() {
+                    myElement.style.display = ""
+                    inpuElement.setAttribute('required', '');
+                }
+                function hide() {
+                    myElement.style.display = "none"
+                    inpuElement.removeAttribute("required");
+                }
+            </script>
         </div>
 
         <%- include('../layout/footer.ejs') %>
