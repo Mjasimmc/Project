@@ -21,7 +21,7 @@
                         <% } %>
 
                             <h4>Login Your Account</h4>
-                            <input type="text" id="login" class="fadeIn second" name="email" placeholder="Enter Email">
+                            <input type="text" id="login" class="fadeIn second" name="email" placeholder="Enter Email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
                             <input type="text" id="password" class="fadeIn third" name="password"
                                 placeholder="password">
                             <input type="submit" class="fadeIn fourth" value="Log In">
@@ -38,5 +38,7 @@
 
             </div>
         </div>
+        <script>
 
+        </script>
         <%- include('../layout/footer.ejs') %>

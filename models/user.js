@@ -41,12 +41,16 @@ const userSchema = mongoose.Schema({
             quantity: {
                 type: Number,
             },
-            size:{
-                type:String,
-                default:'M'
-            },
             total:{
                 type:String
+            }
+        }
+    ],
+    orders:[
+        {
+            order:{
+                type:String,
+                ref:'orders'
             }
         }
     ]

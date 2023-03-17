@@ -164,7 +164,8 @@
 
                 <div class="row isotope-grid">
                     <!-- start loop -->
-                    <% products.forEach((element)=> { %>
+                    <% products.forEach((element,index)=> {
+                        if (element.stock > 0 && index <4) { %>
                         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <%= element.category %>">
                             <!-- Block2 -->
                             <div class="block2">
@@ -198,20 +199,60 @@
                                                 src="userTemplate/images/icons/icon-heart-02.png" alt="ICON">
                                         </a>
                                     </div>
-                                    <button onclick="increment('<%= element._id %>')"
+                                    <% let product = false
+                                    for( let index = 0; index < user.cart.length; index++ ) { 
+                                        if (user.cart[index].product == element._id) {
+                                            product = true }  } %>
+                                     <% if (product == true) { %>
+										<a href="/view-cart" id="goto<%= index %>" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15  pointer">
+											Go to cart
+										</a>
+                                      <% } else { %>
+                                        <button onclick="increment('<%= element._id %>','<%= index %>')"
+                                            id="button<%= index %>"
+                                            class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15  pointer">
+                                            Add to cart
+                                        </button>
+                                     <% } %>
+                                     <a href="/view-cart" id="goto<%= index %>" style="display: none;" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15  pointer">
+										<button
                                         class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15  pointer">
-                                        Add to cart
-                                    </button>
+                                        Go to cart
+                                    </button></a>
+                                    
                                 </div>
                             </div>
                         </div>
                         <!-- single product -->
 
-                        <% }) %>
+                        <% } }) %>
+                            <script>
+                                function increment(pdt_id, num) {
+                                    document.getElementById(`goto${num}`).style.display = ""
+
+                                    document.getElementById(`button${num}`).style.display = "none"
+
+                                    $.ajax({
+                                        url: "/add-cart",
+                                        method: 'POST',
+                                        data: { pdt_id: pdt_id },
+                                        encoded: true,
+                                        success: function (response) {
+                                            console.log("ok")
+                                            if (response.increment) {
+                                                incrementCartCount()
+                                            }
+                                        }
+                                    });
+                                }
+                                function incrementCartCount() {
+                                    var cartIcon = document.querySelector('.icon-header-noti');
+                                    var currentValue = parseInt(cartIcon.getAttribute('data-notify'));
+                                    currentValue += 1;
+                                    cartIcon.setAttribute('data-notify', currentValue);
+                                }
+                            </script>
                             <!-- end loop -->
-
-
-
                 </div>
 
                 <!-- Load more -->
@@ -222,27 +263,6 @@
                 </div>
             </div>
         </section>
-        <script>
-            function increment(pdt_id) {
-                $.ajax({
-                    url: "/add-cart",
-                    method: 'POST',
-                    data: { pdt_id: pdt_id },
-                    encoded: true,
-                    success: function (response) {
-                        console.log("ok")
-                        if (response.increment) {
-                            incrementCartCount()
-                        }
-                    }
-                });
-            }
-            function incrementCartCount() {
-                var cartIcon = document.querySelector('.icon-header-noti');
-                var currentValue = parseInt(cartIcon.getAttribute('data-notify'));
-                currentValue += 1;
-                cartIcon.setAttribute('data-notify', currentValue);
-            }
-        </script>
+
 
         <%- include('../layout/footer.ejs') %>

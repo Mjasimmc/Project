@@ -3,18 +3,30 @@ const productView = require('../models/product')
 const orderPlace = require('../models/orders')
 const categorySearch = require('../models/catogory')
 const bcrypt = require('bcrypt');
-const accountSid = 'ACc70528d5f66cd5624544f806314b2fba';
-const authToken = 'a4481afde430d52d964827509ee0407b';
-const client = require('twilio')(accountSid, authToken);
-const serviceSid = 'MG1fef30fecfb4a5ac567e1daf55baa7dd';
+require('dotenv').config({ path: __dirname + '../config/.env' })
 
-const sendOTP = (toNumber, otp) => {
-    client.messages.create({
-        to: toNumber,
-        messagingServiceSid: serviceSid,
-        body: `Your Otp Is ${otp}`
-    }).then(message => console.log(message.sid))
-        .catch(error => console.log(error));
+const Razorpay = require('razorpay');
+const razorpay = new Razorpay({
+    key_id: process.env.key_id,
+    key_secret: process.env.key_secret,
+});
+
+
+const accountSid = process.env.accountSid;
+const authToken = process.env.authToken;
+
+
+const client = require('twilio')(accountSid, authToken);
+
+const sendOTP = async (toNumber, otp) => {
+    await client.messages
+        .create({
+            body: 'Hello from Twilio!',
+            from: '+15674092922',
+            to: toNumber
+        })
+        .then(message => console.log(message.sid))
+        .catch(error => console.error(error));
 }
 const securePassword = async (password) => {
     try {
@@ -49,6 +61,7 @@ const loadPhoneNumber = async (req, res, next) => {
 const postNumber = async (req, res, next) => {
     try {
         const sendMobile = "+91" + req.body.mobile
+        console.log(sendMobile)
         req.session.mobile = sendMobile
         const otpSend = Math.floor((Math.random() * 1000000) + 1)
         console.log(otpSend)
@@ -67,7 +80,7 @@ const verifyOtp = async (req, res, next) => {
         if (otp == userOtp) {
             res.redirect('/signUp')
         } else {
-            res.redirect('/register')
+            res.render('otpChecking')
         }
     } catch (error) {
         console.log(error.message)
@@ -122,7 +135,7 @@ const post_SignIn = async (req, res, next) => {
 }
 const loadForgotPassword = async (req, res, next) => {
     try {
-        res.render('phoneNumber')
+        res.render('phoneNumberForget')
     } catch (error) {
         console.log(error.message)
         next(error)
@@ -130,12 +143,14 @@ const loadForgotPassword = async (req, res, next) => {
 }
 const postNumberForgetPass = async (req, res, next) => {
     try {
-        const sendMobile = "+91" + req.body.mobile
+        const sendMobile = "91" + req.body.mobile
         req.session.mobile = sendMobile
         const email = req.body.email
+
         req.session.user = await userModify.findOne({ email: email })
         const otpSend = Math.floor((Math.random() * 1000000) + 1)
         req.session.sendOtp = otpSend
+        console.log(otpSend)
         sendOTP(sendMobile, otpSend)
         res.render('forgetOtp')
     } catch (error) {
@@ -155,31 +170,43 @@ const postOtpPass = async (req, res, next) => {
             const otpSend = Math.floor((Math.random() * 1000000) + 1)
             console.log(otpSend)
             req.session.sendOtp = otpSend
-            sendOTP(sendMobile, otpSend)
+            // sendOTP(sendMobile, otpSend)
             res.render('forgetOtp')
         }
     } catch (error) {
         console.log(error.message)
     }
 }
+const changePass = async (req, res, next) => {
+    try {
+        const pass = await securePassword(req.body.password)
+        const userid = req.session.user._id
+        console.log(userid)
+        const result = await userModify.findOneAndUpdate({ _id: userid }, {
+            $set: {
+                password: pass
+            }
+        })
+        console.log(result)
+        res.redirect('/login')
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
 const post_SignUp = async (req, res, next) => {
     try {
-
         const { mobile, name, email } = req.body
-
+        console.log(mobile, name, email)
         let password = await securePassword(req.body.password)
         const userdata = await userModify.findOne({ email: email })
         console.log(userdata)
-
         const userinsert = new userModify({
             name: name,
             email: email,
             mobile: mobile,
             password: password
         })
-
-
-
         if (userdata != null) {
             req.session.signupmessage = "you already have an account"
             res.redirect('/register')
@@ -206,7 +233,6 @@ const load_Home = async (req, res, next) => {
         var products = await productView.find({ delete: 0 })
         res.render('home', { products, user, category })
 
-
     } catch (err) {
         console.log(err.message)
         next(err);
@@ -224,7 +250,7 @@ const logout = async (req, res, next) => {
 }
 const l_browse_Product = async (req, res, next) => {
     try {
-       
+
         const prid = req.params.id
         const prdetails = await productView.findOne({ _id: prid });
         const category = prdetails.category
@@ -381,18 +407,19 @@ const view_cart = async (req, res, next) => {
 const add_to_cart = async (req, res, next) => {
     try {
         const { pdt_id } = req.body
+
         const id = req.session.login._id
-        const prdtcheck = async (id) => await userModify.findOne({ "cart.product": id })
-        const check = await prdtcheck(pdt_id)
-        if (check == [] || check == null) {
+        const productDetails = await productView.findOne({ _id: pdt_id })
+        const check = await userModify.findOne({ "cart.product": pdt_id })
+        console.log(productDetails)
+        if (check == [] || check == null || check == 'undefined') {
             const quantity = 1
-            const datatoinsert = {
-                product: pdt_id,
-                quantity: quantity,
-            }
             await userModify.findOneAndUpdate({ _id: id }, {
                 $push: {
-                    cart: [datatoinsert]
+                    cart: {
+                        product: pdt_id,
+                        quantity: quantity,
+                    }
                 }
             }, { upsert: true })
                 .then(() => res.json(
@@ -402,16 +429,27 @@ const add_to_cart = async (req, res, next) => {
                     }))
                 .catch(() => console.log('not inserted'))
         } else {
-            await userModify.findOneAndUpdate(
-                { _id: id, "cart.product": pdt_id },
-                { $inc: { "cart.$.quantity": 1 } }
-            ).then(() => {
+            const num = parseInt(req.body.num)
+            console.log(check.cart[num])
+            if (check.cart[num].quantity + 1 <= productDetails.stock) {
+                await userModify.findOneAndUpdate(
+                    { _id: id, "cart.product": pdt_id },
+                    { $inc: { "cart.$.quantity": 1 } }
+                ).then(() => {
+                    res.json(
+                        {
+                            status: true,
+                            increment: false,
+                            productIncrement: true,
+                        })
+                })
+            } else {
                 res.json(
                     {
-                        status: true,
-                        increment: false
+                        status: false,
+                        increment: false,
                     })
-            })
+            }
         }
     } catch (err) {
         console.log(err.message);
@@ -453,7 +491,7 @@ const remove_cart = async (req, res, next) => {
             { _id: id, "cart.product": pdt_id },
             { $pull: { cart: { product: pdt_id, quantity: 0 } } }
         )
-        .catch((err) => console.log(err))
+            .catch((err) => console.log(err))
         res.json({ status: true })
     } catch (error) {
         console.log(error.message)
@@ -495,18 +533,24 @@ const post_order = async (req, res, next) => {
     try {
         const { name, house, post, city, state, district, totalprice, mobile } = req.body
         const user = req.session.login
+        const productsIn = await productView.find({})
+        for (let i = 0; i < user.cart.length; i++) {
+            for (let j = 0; j < productsIn.length; j++) {
+                if (user.cart[i].product == productsIn[j]._id) {
+                    const pdtq = productsIn[j].stock - user.cart[i].quantity
+                    await productView.findOneAndUpdate({ _id: productsIn[j]._id }, { $set: { stock: pdtq } })
+                }
+            }
+        }
+
+
         const payement = req.body.payement
         const userdata = await userModify.findOne({ _id: user._id })
         let products = userdata.cart
         const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        const hours = String(currentDate.getHours()).padStart(2, '0');
-        const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-        const seconds = String(currentDate.getSeconds()).padStart(2, '0');
 
-        const currentDateAndTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+        const currentDateAndTime = currentDate;
         const newOrder = new orderPlace({
             user: user._id,
             products: products,
@@ -529,7 +573,7 @@ const post_order = async (req, res, next) => {
             let products = result.product
             const orderDetails = await orderPlace.findOne({ _id: result._id }).populate("products.product")
             req.session.order = orderDetails
-            console.log(orderDetails.cart   )
+            await userModify.findOneAndUpdate({ _id: user._id }, { $unset: { cart: 1 } })
             res.render('order-placed', { orderDetails, user })
         } else {
             res.redirect('/checkout')
@@ -539,49 +583,42 @@ const post_order = async (req, res, next) => {
         next(error)
     }
 }
+const verifyPayment = async (req,res,next)=>{
 
+}
 
 module.exports = {
+
+
+    changePass,
     postOtpPass,
     postNumberForgetPass,
     loadForgotPassword,
-
     load_SignUp,
     loadPhoneNumber,
     postNumber,
     verifyOtp,
-
     post_order,
     load_checkout,
-
-
     view_shop_after,
     view_shop_before,
-
     view_cart,
     add_to_cart,
     remove_cart,
     deleteProductCart,
-
     load_landing,
     load_SignIn,
-
     load_profile,
     load_Home,
-
     edit_user,
     update_profile,
-
     insert_address,
     delete_address,
     add_address,
     load_address,
-
     logout,
-
     post_SignIn,
     post_SignUp,
-
     l_browse_Product,
     h_browse_product
 }

@@ -11,20 +11,17 @@ const order = mongoose.Schema({
         },
         quantity: {
             type: Number
-        },
-        size:{
-            type:String
         }
     }],
     orderdate: {
-        type: String
+        type: Date
     },
     payement: {
         type: String
     },
     orderstatus: [
         String
-    ],
+    ],  
     orderaddress: {
         name: { type: String },
         mobile: { type: Number },

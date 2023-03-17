@@ -15,7 +15,8 @@ router.get('/product/:id',search.productGet,sessioncheck.result,userController.l
 router.get('/login',sessioncheck.result,userController.load_SignIn)
 router.get('/forgetPass',sessioncheck.result,userController.loadForgotPassword)
 router.post('/forgetPass',sessioncheck.result,userController.postNumberForgetPass)
-router.post('/passChange',sessioncheck.result,userController.postOtpPass)
+router.post('/passchange',sessioncheck.result,userController.postOtpPass)
+router.post('/passwordchange',sessioncheck.result,userController.changePass)
 
 
 
@@ -27,7 +28,7 @@ router.get('/lshop',sessioncheck.result,search.search_result,userController.view
 router.post('/verifyOtp',sessioncheck.result,userController.verifyOtp)
 
 // adding welcomers and resigning
-router.post('/register',sessioncheck.result,userController.post_SignUp)
+router.post('/registerUser',sessioncheck.result,userController.post_SignUp)
 router.post('/login',sessioncheck.result,userController.post_SignIn)
 router.get('/logout',userController.logout)
 

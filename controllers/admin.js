@@ -241,7 +241,28 @@ const updateProduct = async (req, res, next) => {
         next(error)
     }
 }
+const loadOrderList = async (req,res,next)=>{
+    try {
+        const orders = await orderModel.find({}).populate("user")
+        res.render('orderlist',{orders})
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
+const viewOrder = async (req,res,next)=>{
+    try {
+        const OrderId = req.params.id
+        console.log(OrderId)
+
+    } catch (error) {
+        console.log(error.message)
+        next(error)
+    }
+}
 module.exports = {
+    viewOrder,
+    loadOrderList,
 
     updateProduct,
     loadEditProduct,

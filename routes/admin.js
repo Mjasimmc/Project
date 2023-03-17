@@ -48,5 +48,8 @@ router.get('/categorylist',sessionCheck.logged,adminController.categorylist)
 router.get('/category',sessionCheck.logged,adminController.loadcategory)
 router.post('/addcategory',sessionCheck.logged,adminController.insertCategory)
 
+router.get('/orderList',sessionCheck.logged,adminController.loadOrderList)
+router.get('/order/:id',adminController.viewOrder)
+
 
 module.exports = router;

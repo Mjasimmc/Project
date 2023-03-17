@@ -16,7 +16,7 @@
         <div class="container wrapper">
 
             <div class="row cart-body">
-                <form class="form-horizontal" method="post" action="/post-order">
+                <form class="form-horizontal" method="post" onsubmit="return checkpayement()" action="/post-order">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-push-6 col-sm-push-6">
                         <!--REVIEW ORDER-->
                         <div class="panel panel-info">
@@ -135,30 +135,7 @@
                                         </div>
                                     </div>
                                     <% } else { %>
-                                        <div class="form-group">
-                                            <div class="col-md-12"><strong>Address:</strong></div>
-                                            <div class="col-md-12">
-                                                <input type="text" name="house" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-12"><strong>City:</strong></div>
-                                            <div class="col-md-12">
-                                                <input type="text" name="city" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-12"><strong>District:</strong></div>
-                                            <div class="col-md-12">
-                                                <input type="text" name="district" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-12"><strong>Zip / Postal Code:</strong></div>
-                                            <div class="col-md-12">
-                                                <input type="text" name="post" class="form-control" />
-                                            </div>
-                                        </div>
+                                        <a href="/add-address" class="btn btn-danger"></a>
                                         <% } %>
                                             <div class="form-group">
                                                 <div class="col-md-12"><strong>Phone Number:</strong></div>
@@ -172,36 +149,28 @@
                                             </div>
                             </div>
                         </div>
-                        <!--SHIPPING METHOD END-->
-                        <!--CREDIT CART PAYMENT-->
+
                         <div class="panel panel-info">
                             <div class="panel-heading"><span><i class="glyphicon glyphicon-lock"></i></span> Payement
                                 Method</div>
                             <div class="panel-body">
                                 <div class="form-group">
-
-                                    <input type="radio" onclick="hide()" class="col-1" name="payement"
-                                        value="Cash On Delivery" required>
-                                    <strong class="col-5">Cash On Delivery</strong>
-                                </div>
-                                <div class="form-group  ">
-                                    <input type="radio" name="payement" onclick="display()" class="col-1"
-                                        value="Online Payement" required>
-                                    <strong class="col-5">Online Payement</strong>
-                                </div>
-                                <div class="form-group" id="ok" style="display: none;">
-                                    <div class="col-md-12"><strong>Credit Card Number:</strong></div>
-                                    <div class=" col-md-12">
-                                        <input type=" text" class="form-control" name="car_number" value="" id="inputdetails" />
-                                    </div>
-                                </div>
-                                <div class="form-group" id="ok" style="display: none;">
-                                    <div class="col-md-12"><strong>Card CVV:</strong></div>
+                                    <input type="radio" class="col-1" name="payement" value="COD" required>
                                     <div class="col-md-12">
-                                        <input type="text" class="form-control" name="car_code" value=""  id="inputdetails"/>
+                                        <strong class="col-5">Cash On Delivery</strong>
                                     </div>
                                 </div>
-                                <div class="form-group" id="ok">
+                                <div class="form-group">
+                                    <input type="radio" class="col-1" name="payement" value="OP" required>
+                                    <div class="col-md-12">
+                                        <strong class="col-5">Online Payement</strong>
+                                        <button type="submit" class="btn btn-primary btn-block" id="rzp-button1"
+                                            onClick="razorpay_payment();">Pay with Razorpay</button>
+
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                         <button type="submit" class="btn btn-primary btn-submit-fix">Place
                                             Order</button>
@@ -209,22 +178,66 @@
                                 </div>
                             </div>
                         </div>
-                        <!--CREDIT CART PAYMENT END-->
                     </div>
                 </form>
             </div>
-            <script>
-                const inpuElement = document.getElementById('inputdetails')
-                const myElement = document.getElementById(`ok`);
-                function display() {
-                    myElement.style.display = ""
-                    inpuElement.setAttribute('required', '');
-                }
-                function hide() {
-                    myElement.style.display = "none"
-                    inpuElement.removeAttribute("required");
-                }
-            </script>
         </div>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            function checkpayement() {
+
+
+                $.ajax({
+                    url: "/post-order",
+                    method: 'POST',
+                    data: {
+                        name:, house, post, city, state, district, totalprice, mobile
+                    },
+                    encoded: true,
+                    success: function (response) {
+                        console.log(response)
+                        if (response.status) {
+                            let value = parseInt(document.getElementById(`countnum${num}`).value)
+                            document.getElementById(`countnum${num}`).value = value + 1
+                            updatePrice()
+                        } else {
+                            alert("product limit exceeded")
+                        }
+                    }
+                });
+            }
+
+
+            function razorpay_payment() {
+                var totalAmount = parseInt(document.getElementsByName('totalprice')[0].value);
+                var options = {
+                    "key": "rzp_test_0vN6fDOIHGEZ8I",
+                    "amount": totalAmount * 100,
+                    "currency": "INR",
+                    "name": "Your Company Name",
+                    "description": "Purchase Description",
+                    "image": "https://yourcompany.com/logo.png",
+                    "handler": function (response) {
+                        // code to handle successful payment response
+                    },
+                    "prefill": {
+                        "name": "<%= users.name %>",
+                        "email": "<%= users.email %>",
+                        "contact": "<%= users.contact %>"
+                    },
+                    "notes": {
+                        "address": "<%= users.address[0].house %>, <%= users.address[0].city %>, <%= users.address[0].district %>"
+                    },
+                    "theme": {
+                        "color": "#F37254"
+                    }
+                };
+
+                var rzp1 = new Razorpay(options);
+                rzp1.open();
+                event.preventDefault();
+            }
+
+        </script>
 
         <%- include('../layout/footer.ejs') %>
